@@ -36,29 +36,16 @@ class Admin_GIGL_Handler_Class extends Base_Controller_Handler_Class
 
 		$this->subpages = array(
 			array(
-				'parent_slug' => 'gigl_plugin', 
-				'page_title' => 'GIGL Settings', 
-				'menu_title' => 'GIGL Settings', 
-				'capability' => 'manage_options', 
-				'menu_slug' => 'wc-settings&tab=shipping&section=gig_logistics_delivery', 
-				'callback' => function() { echo sanitize_text_field('<h1>CPT Manager</h1>'); }
-			),
-			// array(
-			// 	'parent_slug' => 'gigl_plugin', 
-			// 	'page_title' => 'Custom Taxonomies', 
-			// 	'menu_title' => 'Taxonomies', 
-			// 	'capability' => 'manage_options', 
-			// 	'menu_slug' => 'gigl_taxonomies', 
-			// 	'callback' => function() { echo sanitize_text_field('<h1>Taxonomies Manager</h1>'); }
-			// ),
-			// array(
-			// 	'parent_slug' => 'gigl_plugin', 
-			// 	'page_title' => 'Custom Widgets', 
-			// 	'menu_title' => 'Widgets', 
-			// 	'capability' => 'manage_options', 
-			// 	'menu_slug' => 'gigl_widgets', 
-			// 	'callback' => function() { echo sanitize_text_field('<h1>Widgets Manager</h1>'; }
-			// )
+				'parent_slug' => 'gigl_plugin',
+				'page_title' => 'GIGL Settings',
+				'menu_title' => 'GIGL Settings',
+				'capability' => 'manage_options',
+				'menu_slug' => 'wc-settings&tab=shipping&section=gig_logistics_delivery',
+				'callback' => function () {
+					echo '<h1>' . esc_html__('CPT Manager', 'gigl-delivery') . '</h1>';
+				}
+			)
+
 		);
 	}
 

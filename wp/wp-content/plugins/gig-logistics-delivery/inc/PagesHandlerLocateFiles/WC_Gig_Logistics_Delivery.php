@@ -294,24 +294,24 @@
 					
 					$delivery_coordinate = $api->get_lat_lng($delivery_address);
 					
-					if (!isset($delivery_coordinate['Latitude']) && !isset($delivery_coordinate['Longitude'])) {
-						$delivery_coordinate = $api->get_lat_lng($delivery_address1);
-					}
-					if (!isset($delivery_coordinate['Latitude']) && !isset($delivery_coordinate['Longitude'])) {
-						$delivery_coordinate = $api->get_lat_lng("$delivery_state, $delivery_country");
-					}
+					// if (!isset($delivery_coordinate['Latitude']) && !isset($delivery_coordinate['Longitude'])) {
+					// 	$delivery_coordinate = $api->get_lat_lng($delivery_address1);
+					// }
+					// if (!isset($delivery_coordinate['Latitude']) && !isset($delivery_coordinate['Longitude'])) {
+					// 	$delivery_coordinate = $api->get_lat_lng("$delivery_state, $delivery_country");
+					// }
 					
 					$pickup_address =  (($pickup_base_address) ? ("$pickup_base_address,") : '').(($pickup_city) ? ("$pickup_city,") : '') . (($pickup_state) ? ("$pickup_state,") : ''). 'nigeria';
 					$pickup_address1 =  (($pickup_city) ? ("$pickup_city,") : '') . (($pickup_state) ? ("$pickup_state,") : ''). 'nigeria';
 					
 					$pickup_coordinate = $api->get_lat_lng($pickup_address);
 					
-					if (!isset($pickup_coordinate['Latitude']) && !isset($pickup_coordinate['Longitude'])) {
-						$pickup_coordinate = $api->get_lat_lng($pickup_address1);
-					}
-					if (!isset($pickup_coordinate['Latitude']) && !isset($pickup_coordinate['Longitude'])) {
-						$pickup_coordinate = $api->get_lat_lng("$pickup_state, $pickup_country");
-					}
+					// if (!isset($pickup_coordinate['Latitude']) && !isset($pickup_coordinate['Longitude'])) {
+					// 	$pickup_coordinate = $api->get_lat_lng($pickup_address1);
+					// }
+					// if (!isset($pickup_coordinate['Latitude']) && !isset($pickup_coordinate['Longitude'])) {
+					// 	$pickup_coordinate = $api->get_lat_lng("$pickup_state, $pickup_country");
+					// }
 					
 				}else {
 					
@@ -414,14 +414,13 @@
 				// 			);
 				// }
 
-				 //error_log(print_r($params, true));
+				
 				$response = $api->create_task($params);
 				
 				$order->add_order_note("Gig Logistics Delivery: " . $response->data->message);
 				$_SESSION['bogus'] = 'bogus';
 
 					if (isset($response->data->Waybill)) {
-					// print_r($response->data->Waybill);
 					if($this->settings['mode'] == 'test'){
 						$endpoint = 'https://dev-thirdpartynode.theagilitysystems.com/track/mobileShipment?Waybill=';
 					}else{
@@ -499,14 +498,9 @@
 		*/
 		public function update_order_shipping_status($order_id)
 		{
-			// error_log(message: print_r(value: 'heyyyyyyyyyyy', return: true));
-			// update_post_meta($order_id, 'MobileShipmentTrackingId', $order_id);
-			
-			// error_log(message: print_r(value: 'heyyyyyyyyyyy', return: true));
 			
 
 			// $order = wc_get_order($order_id);
-			// error_log(message: print_r(value: $order, return: true));
 			// if(!empty($this->currentWaybill)){
 			// 	$gigl_waybill = $this->currentWaybill;
 			// }else{
@@ -524,7 +518,6 @@
 			
 			if ($gigl_waybill) {
 				$response_order_detail = $this->get_api()->get_order_details($gigl_waybill);
-				// print_r($res);
 				if (isset($response_order_detail->data[0]->MobileShipmentTrackings[0]->MobileShipmentTrackingId)) {
 					// $job_delivery_status = $this->statuses[$res->data[0]->MobileShipmentTrackings[0]->Status];
 					$job_delivery_status = $response_order_detail->data[0]->MobileShipmentTrackings[0]->Status;
@@ -570,12 +563,11 @@
 			}
 			
 			// sleep(500);
-			// print($gigl_waybill);
+			
 			$res= $this->get_api()->track_details($gigl_waybill);
-			// print_r($res);
-			// print('api called');
+			
 			if(!isset($res)){
-				// print_r("No tracking details found");
+				
 				$res = (object) [
 					"data" => [
 						(object) [
@@ -641,9 +633,7 @@
     }
     ?>
 </p>
-			 <!-- <p class="wc-gigl-logistics-delivery-track-deliverys">
-                <a href="#" class="button" id="myBtnTrack" data="<?php echo sanitize_text_field($delivery_tracking_url.'the'.$gigl_waybill); ?>">Track Deliverys</a>
-			</p> -->
+			
 		<?php } ?>
 			<style>
 			/* The Modal (background) */
@@ -705,7 +695,7 @@
 			    <hr>
 			    <ul>
 				  <li><strong>Waybill</strong></li>
-				   <!-- <li><?php echo json_encode($res, JSON_PRETTY_PRINT); ?></li> -->
+				   
 				  <li><?php
 							if (
 								isset($res->data) &&
@@ -714,7 +704,7 @@
 								isset($res->data[0]->Waybill) &&
 								!empty($res->data[0]->Waybill)
 							) {
-								echo sanitize_text_field($res->data[0]->Waybill);
+								echo esc_html($res->data[0]->Waybill);
 							}
 							?></li>
 				</ul>
@@ -727,7 +717,7 @@
 								isset($res->data[0]) &&
 								isset($res->data[0]->MobileShipmentTrackings) &&
 								!empty($res->data[0]->MobileShipmentTrackings)
-							) { echo  sanitize_text_field($res->data[0]->MobileShipmentTrackings[0]->PickupOptions); }?></li>
+							) { echo  esc_html($res->data[0]->MobileShipmentTrackings[0]->PickupOptions); }?></li>
 				</ul>
 				 <hr>
 				<ul>
@@ -738,7 +728,7 @@
 								isset($res->data[0]) &&
 								isset($res->data[0]->MobileShipmentTrackings) &&
 								!empty($res->data[0]->MobileShipmentTrackings)
-							) { echo  sanitize_text_field( $res->data[0]->MobileShipmentTrackings[0]->DeliveryOption); } ?></li>
+							) { echo  esc_html( $res->data[0]->MobileShipmentTrackings[0]->DeliveryOption); } ?></li>
 				</ul>
 				 <hr>
 				<ul>

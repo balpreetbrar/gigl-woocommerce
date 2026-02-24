@@ -259,7 +259,7 @@
 					// methods of WC_Order_Item class
 					$product_id = $item["product_id"];
 					$product = wc_get_product( $product_id );
-					$product->get_price();
+					// $product->get_price();
 					//$wc_product = $item->get_product();
 					if ( $product ) {
 						$quantity = $item['quantity'];
@@ -302,9 +302,9 @@
 				
 				
 				
-				$todaydate =  date('Y-m-d H:i:s', time());
-				$pickup_date = date('Y-m-d H:i:s', strtotime($todaydate . ' +1 day'));
-				$delivery_date = date('Y-m-d H:i:s', strtotime($todaydate . ' +2 day'));
+				// $todaydate =  date('Y-m-d H:i:s', time());
+				// $pickup_date = date('Y-m-d H:i:s', strtotime($todaydate . ' +1 day'));
+				// $delivery_date = date('Y-m-d H:i:s', strtotime($todaydate . ' +2 day'));
 				
 				
 				if($delivery_postcode == '' || empty($delivery_postcode)) { 
@@ -312,21 +312,22 @@
 					$delivery_address = (($delivery_base_address) ? ("$delivery_base_address,") : '') . (($delivery_city) ? ("$delivery_city,") : '') . (($delivery_state) ? ("$delivery_state,") : ''). 'Nigeria';
 					
 					$delivery_coordinate = $api->get_lat_lng($delivery_address);
-					if (!isset($delivery_coordinate['Latitude']) && !isset($delivery_coordinate['Longitude'])) {
-						$delivery_coordinate = $api->get_lat_lng($delivery_address1);
-					}
 					
-					if (!isset($delivery_coordinate['Latitude']) && !isset($delivery_coordinate['Longitude'])) {
-						$delivery_coordinate = $api->get_lat_lng("$delivery_state, $delivery_country");
-					}
+					// if (!isset($delivery_coordinate['Latitude']) && !isset($delivery_coordinate['Longitude'])) {
+					// 	$delivery_coordinate = $api->get_lat_lng($delivery_address1);
+					// }
+					
+					// if (!isset($delivery_coordinate['Latitude']) && !isset($delivery_coordinate['Longitude'])) {
+					// 	$delivery_coordinate = $api->get_lat_lng("$delivery_state, $delivery_country");
+					// }
 					
 					$delivery_address1 = (($pickup_city) ? ("$pickup_city,") : '') . (($pickup_state) ? ("$pickup_state,") : ''). 'Nigeria';
 					$pickup_address = trim("$pickup_base_address $pickup_city, $pickup_state, $pickup_country");
 					$pickup_coordinate = $api->get_lat_lng($pickup_address);
 					
-					if (!isset($pickup_coordinate['Latitude']) && !isset($pickup_coordinate['Longitude'])) {
-						$pickup_coordinate = $api->get_lat_lng($delivery_address1);
-					}
+					// if (!isset($pickup_coordinate['Latitude']) && !isset($pickup_coordinate['Longitude'])) {
+					// 	$pickup_coordinate = $api->get_lat_lng($delivery_address1);
+					// }
 					
 				
 				}else {
@@ -339,18 +340,18 @@
 					//$delivery_addressd = trim("$delivery_base_address $delivery_city, $delivery_state, $delivery_country,$delivery_postcode");
 					$delivery_coordinate = $api->get_lat_lng($delivery_address);
 					
-					if (!isset($delivery_coordinate['Latitude']) && !isset($delivery_coordinate['Longitude'])) {
-						$delivery_coordinate = $api->get_lat_lng("$delivery_address");
-					}
-					if (!isset($delivery_coordinate['Latitude']) && !isset($delivery_coordinate['Longitude'])) {
-						$delivery_coordinate = $api->get_lat_lng("$delivery_address1");
-					}
-					if (!isset($delivery_coordinate['Latitude']) && !isset($delivery_coordinate['Longitude'])) {
-						$delivery_coordinate = $api->get_lat_lng("$delivery_address2");
-					}
-					if (!isset($delivery_coordinate['Latitude']) && !isset($delivery_coordinate['Longitude'])) {
-						$delivery_coordinate = $api->get_lat_lng("$delivery_address3");
-					}
+					// if (!isset($delivery_coordinate['Latitude']) && !isset($delivery_coordinate['Longitude'])) {
+					// 	$delivery_coordinate = $api->get_lat_lng("$delivery_address");
+					// }
+					// if (!isset($delivery_coordinate['Latitude']) && !isset($delivery_coordinate['Longitude'])) {
+					// 	$delivery_coordinate = $api->get_lat_lng("$delivery_address1");
+					// }
+					// if (!isset($delivery_coordinate['Latitude']) && !isset($delivery_coordinate['Longitude'])) {
+					// 	$delivery_coordinate = $api->get_lat_lng("$delivery_address2");
+					// }
+					// if (!isset($delivery_coordinate['Latitude']) && !isset($delivery_coordinate['Longitude'])) {
+					// 	$delivery_coordinate = $api->get_lat_lng("$delivery_address3");
+					// }
 					
 					$pickup_address = (($pickup_postcode) ? ("$pickup_postcode,") : '') . (($pickup_city) ? ("$pickup_city,") : '') . (($pickup_state) ? ("$pickup_state,") : ''). 'Nigeria';
 					$pickup_address1 = (($pickup_postcode) ? ("$pickup_postcode,") : '') . (($pickup_state) ? ("$pickup_state,") : ''). 'Nigeria';
@@ -359,15 +360,15 @@
 					
 					$pickup_coordinate = $api->get_lat_lng($pickup_address);
 					
-					if (!isset($pickup_coordinate['Latitude']) && !isset($pickup_coordinate['Longitude'])) {
-						$pickup_coordinate = $api->get_lat_lng("$pickup_address");
-					}
-					if (!isset($pickup_coordinate['Latitude']) && !isset($pickup_coordinate['Longitude'])) {
-						$pickup_coordinate = $api->get_lat_lng("$pickup_address1");
-					}
-					if (!isset($pickup_coordinate['Latitude']) && !isset($pickup_coordinate['Longitude'])) {
-						$pickup_coordinate = $api->get_lat_lng("$pickup_address2");
-					}
+					// if (!isset($pickup_coordinate['Latitude']) && !isset($pickup_coordinate['Longitude'])) {
+					// 	$pickup_coordinate = $api->get_lat_lng("$pickup_address");
+					// }
+					// if (!isset($pickup_coordinate['Latitude']) && !isset($pickup_coordinate['Longitude'])) {
+					// 	$pickup_coordinate = $api->get_lat_lng("$pickup_address1");
+					// }
+					// if (!isset($pickup_coordinate['Latitude']) && !isset($pickup_coordinate['Longitude'])) {
+					// 	$pickup_coordinate = $api->get_lat_lng("$pickup_address2");
+					// }
 					
 				}
 				$receiverLocation = array(
@@ -425,7 +426,7 @@
 				
 			 try {
 			 	$res = $api->calculate_pricing($params);
-				//  print_r(json_encode($res));
+				
 			 	} catch (\Exception $e) {
 					wc_add_notice(__('Gig Logistics Delivery pricing calculation could not complete'), 'notice');
 				wc_add_notice(__($e->getMessage()), 'error');  
@@ -442,7 +443,7 @@
 			}else{
 				$total_no_of_tasks = 0;
 			}
-		// print_r(value:$data->data);
+		
 			$this->add_rate(array(
 			'id'    	=> $this->id . $this->instance_id,
 			'label' 	=> $this->title,

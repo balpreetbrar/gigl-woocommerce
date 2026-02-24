@@ -12,7 +12,7 @@ class Settings_Links_Handler_Class extends Base_Controller_Handler_Class
 	public function register() 
 	{
 		
-		//print_r($this->wc_active_check());
+		
 		add_filter( "plugin_action_links_$this->plugin", array( $this, 'settings_link' ) );
 	}
 

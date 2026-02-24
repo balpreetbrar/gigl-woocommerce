@@ -61,15 +61,13 @@
                'password'     =>$password//?$password: 'GiGL1324@!',//$password,
               
 				);
-				//print_r('still load api'); die();
+				
 				$response = $this->api_request(
                 'login',
                 $params
 				);
 				$login_credentials = $response;
-				// print_r($username .':'. $password);
-				// print('login credentials loaded');
-				// print_r($login_credentials);
+				
 				//set transient
 				set_transient('login_credentials_from_gigl_deleivery', $login_credentials, (HOUR_IN_SECONDS / 24)); // set transient for 5 mins to 9 mins
 				
@@ -92,8 +90,7 @@
 			$access_token = $this->login_credentials->data->{'access-token'};
 			// $params['UserId'] = $this->login_credentials->data->userId;
 			// $params['CustomerCode'] = $this->login_credentials->data->name; 
-			// print_r($params); 
-			// print_r('access token checked'); 
+			
          	// $params['ReceiverStationId'] = "1";
           	// $params['SenderStationId'] = "1";
 			return $this->api_request('capture/preshipment', $params, 'POST', $access_token);
@@ -121,19 +118,21 @@
 			
          	// $params['ReceiverStationId'] = "1";
           	// $params['SenderStationId'] = "1";
-			// print('calculate pricing called');
-			// print_r(value: $access_token);
+			
 
 			return $this->api_request('price', $params, 'POST', $access_token);
 		}
 		
 		public function get_lat_lng($address)
-		{
+		{		
+			// $coordinate['Latitude']  =  '6.61';
+			// 	$coordinate['Longitude'] ='3.35';
+			// return $coordinate;
 			if (!empty($address)) {
 			   $address = 'https://nominatim.openstreetmap.org/search?q='.urlencode($address).'&format=json&limit=1';
 			   $params = array();
 			   $geocodeResponse = $this->api_request($address, $params,'GET');
-			    
+				
 			   if(isset($geocodeResponse[0]->lat)){
 				$coordinate['Latitude']  = (!empty($geocodeResponse)) ? $geocodeResponse[0]->lat : '';
 				$coordinate['Longitude'] = (!empty($geocodeResponse)) ? $geocodeResponse[0]->lon : '';
@@ -151,7 +150,7 @@
 			// $address = rawurlencode($address);
 			// $coordinate   = get_transient('gig_logistics_delivery_addr_geocode_' . $address);
 			
-			// //print_r($coordinate); die();
+			
 			// if (empty($coordinate['Latitude'])) {
 			// 	$params = array('Address' => $address);
 			// 	$geocodeResponse = $this->api_request('getaddressdetails', $params,'post',$access_token);
@@ -180,10 +179,10 @@
 		) {
 			$uri = (strpos($endpoint, "https://") !== false) ? $endpoint : "{$this->request_url}{$endpoint}";
 			// if(strpos($endpoint, "https://") !== false){
-			// 	print($endpoint);die();
+			
 			// }
 			 //$uri = "{$this->request_url}{$endpoint}";
-			// print_r($uri); 
+			
 				 $arg = array(
 				 	'method'      => $method,
         			'timeout'     => 260,
@@ -202,9 +201,7 @@
 					$getApiResponse = wp_remote_get( $uri, $arg );
 				 }else{
 					
-				// 	if($endpoint=='price'){
-				// 	print_r($args); print_r($uri);die();
-				//  }
+				
 					$getApiResponse = wp_remote_request( $uri, $arg );
 				 }
 				if (is_wp_error($getApiResponse)){
@@ -212,7 +209,7 @@
                    }else{
                        $bodyApiResponse = json_decode(wp_remote_retrieve_body($getApiResponse));
                 }
-			//  print_r( $bodyApiResponse );
+			
 			return $bodyApiResponse;
 		}
 		

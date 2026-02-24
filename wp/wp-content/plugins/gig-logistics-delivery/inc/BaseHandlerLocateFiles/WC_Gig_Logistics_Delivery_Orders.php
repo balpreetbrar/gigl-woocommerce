@@ -54,7 +54,7 @@
                     $('select[name^=action]').append(
 					$('<option>')
   .val('update_order_status')
-  .text('<?php _e( "Update Order Status (via gigl delivery)", "gigl-logistics-delivery" ); ?>');
+.text('<?php echo esc_html( __( "Update Order Status (via gigl delivery)", "gigl-logistics-delivery" ) ); ?>');
 
                     );
 				});

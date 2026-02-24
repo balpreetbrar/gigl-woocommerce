@@ -1,117 +1,108 @@
-=== GIG  Delivery for Woocommerce ===
-Tags: Woocommerce, Shipping, GIGL delivery, Home delivery, Nigeria
+=== GIG Delivery for WooCommerce ===
+Contributors: gigl
+Tags: woocommerce, shipping, delivery, gig logistics, nigeria shipping, cash on delivery
 Requires at least: 6.5
 Tested up to: 6.9
 Requires PHP: 7.2.24
 Stable tag: 1.0.0
 License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Version: 1.0.0
-Icon: assets/logo.png
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-
-GIG Woocommerce shipping delivery helps online store to deliver their product/services to their final product/consumer. 
-
-GIG Logistics has covered several countries within Nigeria and outside the country.
+GIG Delivery for WooCommerce integrates GIG Logistics shipping services into your WooCommerce store, enabling real-time shipping rates, order scheduling, and cash on delivery.
 
 == Description ==
 
-Shipping items across countries, whether purchased or produced, can be a hassle, with long delivery timelines and shipping restrictions. GIG Logistics (GIGL) is, however, bridging that gap by providing fast, seamless, and efficient overseas shipping service.
+GIG Delivery for WooCommerce allows online store owners to integrate GIG Logistics (GIGL) shipping services directly into their WooCommerce checkout process.
 
-== Features==
+With this plugin, merchants can calculate real-time shipping rates, schedule shipments automatically after successful payment, and offer cash on delivery services. GIG Logistics operates across Nigeria and internationally, providing reliable and efficient delivery services.
 
-Cash collection on delivery. 
+This plugin ensures seamless order fulfillment and shipment tracking directly from your WooCommerce store.
 
-Track your order with your waybill id.
+== Features ==
 
-Update your sender address.
-
-Switch within Live and Test account.
-
-Send. Track. Receive.
-
-== How it works==
-
-The plugin has been integrated to have the GIGL shipping on the checkout page after active installation of the plugin.
-After ordering and shipping, GIGL will capture the shipping and send a notification to the customer's account on the GIGL platform.
-The Plugin has been designed to work seamlessly, such as having to make payment on delivery from the payment option.
-
-= Plugin feature =
-
-*   __Seamless integration__ into the WooCommerce shipping. Capture Shipping directly on your site
-*  __Order Tracking__
-*  Real Time __Shipping Calculation__
-* __Schedule Order__ on Successful Payments
-
-= 1.0 =
-* Released: September 26, 2023
-Removed error warnings.
-
-= 1.0 =
-* Released: February 22, 2022
-
+* Seamless integration with WooCommerce shipping zones
+* Real-time shipping rate calculation
+* Cash on Delivery (COD) support
+* Order tracking using Waybill ID
+* Automatic shipment scheduling after successful payment
+* Live and Test mode switching
+* Sender address configuration
 
 == Installation ==
 
 = Automatic Installation =
-* 	Login to your WordPress Admin area
-* 	Go to "Plugins > Add New" from the left-hand menu
-* 	In the search box, type __GIGL Delivery__
-*	From the search result you will see __GIGL Delivery__ click on __Install Now__ to install the plugin
-*	A pop-up window will ask you to confirm your wish to install the Plugin.
-*	After installation, activate the plugin.
-* 	Open the settings page for WooCommerce and click the "Shipping" tab OR go to GIGL Logistics > GIG Settings from the left-hand menu.
-*	Configure your __GIGL Delivery__ settings.
+
+1. Log in to your WordPress Admin dashboard.
+2. Go to Plugins > Add New.
+3. Search for "GIG Delivery for WooCommerce".
+4. Click Install Now.
+5. After installation, click Activate.
+6. Go to WooCommerce > Settings > Shipping to configure the plugin.
 
 = Manual Installation =
-1. 	Download the plugin zip file
-2. 	Login to your WordPress Admin. Click on "Plugins > Add New" from the left-hand menu.
-3.  Click on the "Upload" option, then click "Choose File" to select the zip file from your computer. Once selected, press "OK" and press the "Install Now" button.
-4.  Activate the plugin.
-5. 	Open the settings page for WooCommerce and click the "Shipping" tab OR go to GIGL Logistics > GIG Settings from the left-hand menu.
-7.	Configure your __GIGL Delivery__ settings.  
 
+1. Download the plugin ZIP file.
+2. Log in to WordPress Admin.
+3. Go to Plugins > Add New.
+4. Click Upload Plugin.
+5. Choose the downloaded ZIP file and click Install Now.
+6. Activate the plugin.
+7. Go to WooCommerce > Settings > Shipping to configure.
 
-= Configure the plugin =
-To configure the plugin, go to __WooCommerce > Settings__ from the left hand menu, then click __Shipping__ from the top tab OR go to GIGL Logistics > GIG Settings from the left hand menu. You will see __GIGL Delivery__ as part of the available shipping Options. Click on it to configure your shipping account.
+== Configuration ==
 
-* __Enable/Disable__ - Check the box to enable shipping method.
-* __Mode__ - allows you to switch between Live and Test mode.
-* __Test Username__ - Enter your Test Username here. Get your Username from your GIGL account by signup at https://giglogistics.com/sign-in.
-* __Test Password__ - Enter your Test Password here. Get your Password from your GIGL account by signup at https://giglogistics.com/sign-in.
-* __Live Username__ - Enter your Live Username here. Get your Username from your GIGL account by signup at https://giglogistics.com/sign-in.
-* __Live Password__ - Enter your Live Password here. Get your Password from your GIGL account by signup at https://giglogistics.com/sign-in.
-*__Pickup Country__ - Select your delivery country.
-*__Pickup State__   - Select your delivery state.
-*__Pickup Postcode__- Enter your Pickup Postcode here.
-*__Pickup Address__ - Enter your Sender Address here.
-*__Sender Name__    - Enter your Sender Name here.
-*__Sender Phone__   - Enter your Sender Phone Number here.
-* Click on __Save Changes__ for the changes you made to be effected.
+To configure the plugin:
 
-= Process Setup Woocommerce =
-1.  Click on “woo-commerce -> settings”, under general, set-up your company/business location and region. 
-2.  Click on “woo-comerce -> settings”, then click “Shipping” under “Shipping zones”, click on “Add shipping zone” or edit any shipping zone. Input your Zone name, Region and Add your shipping method, then save changes  e.g (Gig Logistics Delivery) to include gigl in your shipping option. 
-3.  Go ahead to take a test.
+1. Go to WooCommerce > Settings.
+2. Click the Shipping tab.
+3. Add or edit a Shipping Zone.
+4. Add "GIG Delivery" as a shipping method.
+5. Click on GIG Delivery to configure the settings.
 
-== Setup Woocommerce ==
+Available Settings:
 
-= Process =
-1.  Click on “woo-commerce -> settings”, under general, set-up your company/business location and region. 
-2.  Click on “woo-comerce -> settings”, then click “Shipping” under “Shipping zones”, click on “Add shipping zone” or edit any shipping zone. Input your Zone name, Region and Add your shipping method, then save changes  e.g (Gig Logistics Delivery) to include gigl in your shipping option. 
-3.  Go ahead to take a test.
+* Enable/Disable – Enable the shipping method.
+* Mode – Switch between Test and Live environments.
+* Test Username – Enter your GIGL test account username.
+* Test Password – Enter your GIGL test account password.
+* Live Username – Enter your GIGL live account username.
+* Live Password – Enter your GIGL live account password.
+* Pickup Country – Select pickup country.
+* Pickup State – Select pickup state.
+* Pickup Postcode – Enter pickup postcode.
+* Pickup Address – Enter sender address.
+* Sender Name – Enter sender name.
+* Sender Phone – Enter sender phone number.
+
+Click "Save Changes" after updating settings.
+
+== WooCommerce Setup ==
+
+1. Go to WooCommerce > Settings > General and set your store location.
+2. Go to WooCommerce > Settings > Shipping.
+3. Create or edit a Shipping Zone.
+4. Click Add Shipping Method.
+5. Select "GIG Delivery".
+6. Save changes.
+7. Test checkout to confirm shipping rates appear.
 
 == Frequently Asked Questions ==
 
-= What Do I Need To Use The Plugin =
+= What do I need to use this plugin? =
 
-1.	You need to have WooCommerce plugin installed and activated on your WordPress site.
-2.	You need to open a GIGL merchant account on [GIG Logistics](https://giglogistics.com/sign-in).
-3.  Access our API documentation in your website with the fellowing link https://dev-thirdpartynode.theagilitysystems.com/docs/
+1. WordPress with WooCommerce installed and activated.
+2. A GIG Logistics merchant account.
+3. API credentials from your GIG Logistics account.
 
-= Catalog =
+Merchant sign-in: https://giglogistics.com/sign-in  
+API documentation: https://dev-thirdpartynode.theagilitysystems.com/docs/
 
-1.	Update API call
-2.	Update PHP Version
-3.  Fix over charge price
-4.  Updated Login message response keys
+== Changelog ==
+
+= 1.0.0 =
+* Initial release
+* Removed error warnings
+* Updated API call handling
+* Improved login response validation
+* Fixed shipping price calculation issues
+
