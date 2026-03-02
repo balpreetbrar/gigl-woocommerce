@@ -4,7 +4,7 @@
  */
 namespace IncGiGl\BaseHandlerLocateFiles;
 
-class Activate_Shipping_Class_Handler
+class GIGL_Delivery_Activator
 {
 	public static function activate() {
 		flush_rewrite_rules();

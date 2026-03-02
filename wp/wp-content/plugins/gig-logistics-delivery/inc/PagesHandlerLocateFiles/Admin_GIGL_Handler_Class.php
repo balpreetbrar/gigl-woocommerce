@@ -5,7 +5,7 @@
 namespace IncGiGl\PagesHandlerLocateFiles;
 
 use \IncGiGl\BaseHandlerLocateFiles\Base_Controller_Handler_Class;
-use \IncGiGl\ApiHandlerLocateFiles\Settings_Api_Handler_Class;
+use \IncGiGl\ApiHandlerLocateFiles\GIGL_Delivery_Settings_API;
 
 /**
 * 
@@ -20,7 +20,7 @@ class Admin_GIGL_Handler_Class extends Base_Controller_Handler_Class
 
 	public function __construct()
 	{
-		$this->settings = new Settings_Api_Handler_Class();
+		$this->settings = new GIGL_Delivery_Settings_API();
 
 		$this->pages = array(
 			array(

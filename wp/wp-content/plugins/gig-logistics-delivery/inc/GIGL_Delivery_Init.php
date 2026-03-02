@@ -4,7 +4,7 @@
  */
 namespace IncGiGl;
 
-final class Init_GIGL
+final class GIGL_Delivery_Init
 {
 	/**
 	 * Store all the classes inside an array
