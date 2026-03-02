@@ -5,6 +5,7 @@
 namespace IncGiGl\BaseHandlerLocateFiles;
 
 use \IncGiGl\BaseHandlerLocateFiles\Base_Controller_Handler_Class;
+if ( ! defined( 'ABSPATH' ) ) exit;
 
 /**
 * 

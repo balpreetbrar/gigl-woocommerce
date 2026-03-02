@@ -23,7 +23,7 @@
 				$password = isset($settings['live_password']) ? $settings['live_password'] : '';    
 				
 				
-				$this->request_url = 'https://prod-agilitythirdpartyapi.theagilitysystems.com/api/thirdParty/';//'https://thirdparty.gigl-go.com/api/thirdparty/'; //'https://mobile.gigl-go.com/api/thirdparty/';
+				$this->request_url = 'https://thirdpartynode.theagilitysystems.com/';//'https://thirdparty.gigl-go.com/api/thirdparty/'; //'https://mobile.gigl-go.com/api/thirdparty/';
 
 				$this->sender_name = isset($settings['sender_name']) ? $settings['sender_name'] : '';
 				$this->sender_phone_number = isset($settings['sender_phone_number']) ? $settings['sender_phone_number'] : '';
@@ -51,7 +51,7 @@
 		{
 			
 		
-			$login_credentials = get_transient('login_credentials_from_gigl_deleivery');
+			$login_credentials = get_transient('giglode_login_credentials');
 			
 			// Transient expired or doesn't exist, fetch the data
 			if (empty($login_credentials)  ) {
@@ -69,7 +69,7 @@
 				$login_credentials = $response;
 				
 				//set transient
-				set_transient('login_credentials_from_gigl_deleivery', $login_credentials, (HOUR_IN_SECONDS / 24)); // set transient for 5 mins to 9 mins
+				set_transient('giglode_login_credentials', $login_credentials, (HOUR_IN_SECONDS / 24)); // set transient for 5 mins to 9 mins
 				
 			}
 			

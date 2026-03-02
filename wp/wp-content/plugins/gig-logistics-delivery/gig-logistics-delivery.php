@@ -29,22 +29,22 @@ if ( file_exists( dirname( __FILE__ ) . '/vendor/autoload.php' ) ) {
 /**
  * The code that runs during plugin activation
  */
-function activate_gigl_plugin() {
+function gigl_activate_plugin() {
 	IncGiGl\BaseHandlerLocateFiles\Activate_Shipping_Class_Handler::activate();
 }
-register_activation_hook( __FILE__, 'activate_gigl_plugin' );
+register_activation_hook( __FILE__, 'gigl_activate_plugin' );
 
-/**
- * The code that runs during plugin deactivation
- */
-function deactivate_gigl_plugin() {
+function gigl_deactivate_plugin() {
 	IncGiGl\BaseHandlerLocateFiles\Deactivate_Shipping_Class_Handler::deactivate();
 }
-register_deactivation_hook( __FILE__, 'deactivate_gigl_plugin' );
+register_deactivation_hook( __FILE__, 'gigl_deactivate_plugin' );
 
 /**
  * Initialize all the core classes of the plugin
  */
 if ( class_exists( 'IncGiGl\\Init_GIGL' ) ) {
 	IncGiGl\Init_GIGL::register_services();
+}
+if ( ! defined( 'GIGL_PLUGIN_URL' ) ) {
+    define( 'GIGL_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 }

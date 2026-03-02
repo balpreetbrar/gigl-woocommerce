@@ -42,7 +42,7 @@ class Admin_GIGL_Handler_Class extends Base_Controller_Handler_Class
 				'capability' => 'manage_options',
 				'menu_slug' => 'wc-settings&tab=shipping&section=gig_logistics_delivery',
 				'callback' => function () {
-					echo '<h1>' . esc_html__('CPT Manager', 'gigl-delivery') . '</h1>';
+					echo '<h1>' . esc_html__('CPT Manager', 'gig-logistics-delivery') . '</h1>';
 				}
 			)
 

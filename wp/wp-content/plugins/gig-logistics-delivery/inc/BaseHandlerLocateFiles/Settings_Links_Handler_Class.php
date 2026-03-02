@@ -5,6 +5,8 @@
 namespace IncGiGl\BaseHandlerLocateFiles;
 
 use \IncGiGl\BaseHandlerLocateFiles\Base_Controller_Handler_Class;
+if ( ! defined( 'ABSPATH' ) ) exit;
+
 class Settings_Links_Handler_Class extends Base_Controller_Handler_Class
 {	
 	

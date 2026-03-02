@@ -124,7 +124,10 @@
 			
 			// adds tracking button(s) to the View Order page
 			add_action('woocommerce_order_details_after_order_table', array($this, 'add_view_order_tracking'),99,3);
-
+		     
+			//add css file for tracking popup
+			// add_action( 'wp_enqueue_scripts', array( $this, 'gigl_enqueue_front_styles' ) );
+			add_action( 'wp_enqueue_scripts', array( $this, 'gigl_enqueue_assets' ) );
 			/**
 				* Filters
 			*/
@@ -162,6 +165,43 @@
 			
 			return $label;
 		}
+		public function gigl_enqueue_assets(){
+			  // Load only on WooCommerce My Account / View Order page
+    if ( ! is_account_page() ) {
+        return;
+    }
+
+    // CSS
+    wp_enqueue_style(
+        'gigl-front-style',
+        GIGL_PLUGIN_URL . 'assets/css/gigl-admin.css',
+        array(),
+        '1.0.0'
+    );
+
+    // JS (THIS IS WHERE YOUR CODE GOES)
+    wp_enqueue_script(
+        'gigl-modal',
+        GIGL_PLUGIN_URL . 'assets/js/gigl-modal.js',
+        array(),
+        '1.0.0',
+        true
+    );
+		}
+public function gigl_enqueue_front_styles() {
+
+    // Load only on My Account / View Order page
+    if ( ! is_account_page() ) {
+        return;
+    }
+
+    wp_enqueue_style(
+        'gigl-front-style',
+        GIGL_PLUGIN_URL . 'assets/css/gigl-admin.css',
+        array(),
+        '1.0.0'
+    );
+}
 
 		/**
 			* Submit data to Gigl to handle your delivery.
@@ -282,9 +322,10 @@
 					$pickup_country = 'NG';
 				}
 				
-				$todaydate =  date('Y-m-d H:i:s', time());
-				$pickup_date = date('Y-m-d H:i:s', strtotime($todaydate . ' +1 day'));
-				$delivery_date = date('Y-m-d H:i:s', strtotime($todaydate . ' +2 day'));
+			$timestamp      = current_time( 'timestamp' );
+$todaydate      = gmdate( 'Y-m-d H:i:s', $timestamp );
+$pickup_date    = gmdate( 'Y-m-d H:i:s', strtotime( '+1 day', $timestamp ) );
+$delivery_date  = gmdate( 'Y-m-d H:i:s', strtotime( '+2 day', $timestamp ) );
 				
 				$api = $this->get_api();
 				
@@ -446,8 +487,11 @@
 					
 					update_post_meta($order_id, 'gig_logistics_delivery_order_response', $response);
 					
-					$note = sprintf(__('Shipment scheduled via Gigl delivery (Order Id: %s)'), $response->data->Waybill);
-					$order->add_order_note($note);
+$note = sprintf(
+    /* translators: %s: Gig Logistics Waybill ID */
+    __('Shipment scheduled via Gigl delivery (Order Id: %s)', 'gig-logistics-delivery'),
+    $response->data->Waybill
+);					$order->add_order_note($note);
 				}
 			}
 		}
@@ -477,14 +521,18 @@
 					
 					$order->update_status('cancelled');
 					
-					$order->add_order_note(__('Order has been cancelled in Gig Logistics Delivery.'));
+					$order->add_order_note(
+    __('Order has been cancelled in Gig Logistics Delivery.', 'gig-logistics-delivery')
+);
 					} catch (Exception $exception) {
 					
-					$order->add_order_note(sprintf(
-                    /* translators: Placeholder: %s - error message */
-                    esc_html__('Unable to cancel order in Gig Logistics Delivery: %s'),
-                    $exception->getMessage()
-					));
+				$order->add_order_note(
+    sprintf(
+        /* translators: %s: Error message returned from Gig Logistics API */
+        esc_html__('Unable to cancel order in Gig Logistics Delivery: %s', 'gig-logistics-delivery'),
+        $exception->getMessage()
+    )
+);
 				}
 			}
 		}
@@ -594,14 +642,8 @@
 				}else{
 					add_post_meta($current_order_id,'gigl_state_value','order_id_'.$current_order_id,true);
 					
-					$loadScript = "<script type='text/javascript'>window.location=document.location.href;</script>";
-	    				
-	        //Sanitize
-	        		echo wp_kses( $loadScript, array( 
-	    				'script' => array(
-	        			'type' => array()
-	    				),
-					) );
+				 wp_safe_redirect( esc_url_raw( $_SERVER['REQUEST_URI'] ) );
+        			exit;
         		}
 			}
 			
@@ -635,57 +677,7 @@
 </p>
 			
 		<?php } ?>
-			<style>
-			/* The Modal (background) */
-			.modal {
-			  display: none; /* Hidden by default */
-			  position: fixed; /* Stay in place */
-			  z-index: 1; /* Sit on top */
-			  padding-top: 100px; /* Location of the box */
-			  left: 0;
-			  top: 0;
-			  width: 100%; /* Full width */
-			  height: 100%; /* Full height */
-			  overflow: auto; /* Enable scroll if needed */
-			  background-color: rgb(0,0,0); /* Fallback color */
-			  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-			}
-
-			/* Modal Content */
-			.modal-content {
-			  background-color: #fefefe;
-			  margin: auto;
-			  padding: 20px;
-			  border: 1px solid #888;
-			  width: 80%;
-			}
-
-			/* The Close Button */
-			.close {
-			  color: #aaaaaa;
-			  float: right;
-			  font-size: 28px;
-			  font-weight: bold;
-			}
-
-			.close:hover,
-			.close:focus {
-			  color: #000;
-			  text-decoration: none;
-			  cursor: pointer;
-			}
-			#modelTrac ul {
-			  list-style-type: none;
-			  width: 100%;
-			  display: table;
-			  table-layout: fixed;
-			}
-
-			#modelTrac li {
-			  display: table-cell;
-			  width: 50%;
-			}
-			</style>
+		
 			<div id="myModal" class="modal">
 
   <!-- Modal content -->
@@ -746,33 +738,7 @@
 
 			</div>
 
-			<script>
-			// Get the modal
-			var modal = document.getElementById("myModal");
-
-			// Get the button that opens the modal
-			var btn = document.getElementById("myBtnTrack");
-
-			// Get the <span> element that closes the modal
-			var span = document.getElementsByClassName("close")[0];
-
-			// When the user clicks the button, open the modal 
-			btn.onclick = function() {
-			  modal.style.display = "block";
-			}
-
-			// When the user clicks on <span> (x), close the modal
-			span.onclick = function() {
-			  modal.style.display = "none";
-			}
-
-			// When the user clicks anywhere outside of the modal, close it
-			window.onclick = function(event) {
-			  if (event.target == modal) {
-			    modal.style.display = "none";
-			  }
-			}
-			</script>
+			
 			<?php
 			}
 		}

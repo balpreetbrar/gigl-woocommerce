@@ -3,6 +3,7 @@
  * @package  GIGLDelivery
  */
 namespace IncGiGl\ApiHandlerLocateFiles;
+if ( ! defined( 'ABSPATH' ) ) exit;
 
 class Settings_Api_Handler_Class
 {

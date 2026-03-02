@@ -1,6 +1,6 @@
-=== GIG Delivery for WooCommerce ===
+=== GIG Logistics Delivery ===
 Contributors: gigl
-Tags: woocommerce, shipping, delivery, gig logistics, nigeria shipping, cash on delivery
+Tags: woocommerce, shipping, delivery, gig logistics, nigeria shipping
 Requires at least: 6.5
 Tested up to: 6.9
 Requires PHP: 7.2.24
@@ -8,11 +8,11 @@ Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-GIG Delivery for WooCommerce integrates GIG Logistics shipping services into your WooCommerce store, enabling real-time shipping rates, order scheduling, and cash on delivery.
+Integrate GIG Logistics shipping with WooCommerce to calculate real-time rates, schedule shipments, and support cash on delivery.
 
 == Description ==
 
-GIG Delivery for WooCommerce allows online store owners to integrate GIG Logistics (GIGL) shipping services directly into their WooCommerce checkout process.
+GIG Logistics Delivery allows online store owners to integrate GIG Logistics (GIGL) shipping services directly into their WooCommerce checkout process.
 
 With this plugin, merchants can calculate real-time shipping rates, schedule shipments automatically after successful payment, and offer cash on delivery services. GIG Logistics operates across Nigeria and internationally, providing reliable and efficient delivery services.
 
@@ -34,7 +34,7 @@ This plugin ensures seamless order fulfillment and shipment tracking directly fr
 
 1. Log in to your WordPress Admin dashboard.
 2. Go to Plugins > Add New.
-3. Search for "GIG Delivery for WooCommerce".
+3. Search for "GIG Logistics Delivery".
 4. Click Install Now.
 5. After installation, click Activate.
 6. Go to WooCommerce > Settings > Shipping to configure the plugin.
@@ -86,6 +86,88 @@ Click "Save Changes" after updating settings.
 6. Save changes.
 7. Test checkout to confirm shipping rates appear.
 
+== External Services ==
+
+== External Services ==
+
+This plugin connects to the official GIG Logistics (GIGL) Shipping API to provide shipping rate calculation, shipment scheduling, tracking, and cash on delivery services inside WooCommerce.
+
+Service Provider:
+GIG Logistics
+
+Official Website:
+https://giglogistics.com/
+
+API Domains Used by This Plugin:
+
+The plugin communicates with the following GIG Logistics API domains:
+
+Test Environment:
+https://dev-thirdpartynode.theagilitysystems.com/
+
+Production Environments:
+https://thirdpartynode.theagilitysystems.com/
+https://prod-agilitythirdpartyapi.theagilitysystems.com/
+
+These domains are official GIG Logistics API endpoints operated by GIG Logistics.  
+All data transmitted to these domains is governed by GIG Logistics' Terms of Service and Privacy Policy listed below.
+
+What the service is used for:
+
+The API is required to:
+
+- Authenticate merchant accounts
+- Calculate real-time shipping rates at checkout
+- Schedule shipments after order payment
+- Generate and retrieve Waybill IDs
+- Enable Cash on Delivery (COD)
+- Retrieve shipment tracking information
+
+What data is sent and when:
+
+1. During shipping rate calculation at checkout:
+- Pickup address (country, state, postcode, address)
+- Delivery address (country, state, postcode, address)
+- Cart item details (name, quantity, weight, declared value)
+- Shipment details (type, vehicle type, coordinates if available)
+- Merchant API credentials (for authentication)
+
+This data is sent when a customer views or updates the checkout page and shipping rates are requested.
+
+2. During shipment scheduling after payment:
+- Sender name and phone number
+- Receiver name, email address, and phone number
+- Delivery address
+- Order value
+- Shipment item details
+
+This data is sent only after an order is placed and shipment scheduling is triggered.
+
+3. During shipment tracking:
+- Waybill ID
+
+This data is sent when tracking information is requested.
+
+Under what conditions data is transmitted:
+
+Data is only transmitted if:
+- The shipping method is enabled.
+- Valid API credentials are configured.
+- Shipping rates are requested at checkout.
+- A shipment is scheduled after payment.
+- Tracking information is requested.
+
+No data is transmitted if the plugin is disabled or not configured.
+
+Terms of Service:
+https://giglogistics.com/terms/
+
+Privacy Policy:
+https://giglogistics.com/privacy-policy/
+
+API Documentation:
+https://dev-thirdpartynode.theagilitysystems.com/docs/
+
 == Frequently Asked Questions ==
 
 = What do I need to use this plugin? =
@@ -94,7 +176,7 @@ Click "Save Changes" after updating settings.
 2. A GIG Logistics merchant account.
 3. API credentials from your GIG Logistics account.
 
-Merchant sign-in: https://giglogistics.com/sign-in  
+Merchant sign-in: https://gigagilitysystems.com/Login/ 
 API documentation: https://dev-thirdpartynode.theagilitysystems.com/docs/
 
 == Changelog ==
