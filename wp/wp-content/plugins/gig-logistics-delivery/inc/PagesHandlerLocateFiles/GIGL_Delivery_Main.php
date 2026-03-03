@@ -461,7 +461,6 @@ class GIGL_Delivery_Main
 
 
 			$response = $api->create_task($params);
-			// print_r($response);
 
 			$order->add_order_note("Gig Logistics Delivery: " . $response->data->message);
 			$_SESSION['bogus'] = 'bogus';

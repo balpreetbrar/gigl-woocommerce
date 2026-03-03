@@ -231,7 +231,7 @@ class GIGL_Delivery_Shipping_Method extends WC_Shipping_Method {
 		}
 
 		$delivery_address = trim(
-			"$delivery_base_address, $delivery_city, $delivery_state, $delivery_country"
+			"$delivery_city, $delivery_state, $delivery_country"
 		);
 
 		$pickup_city          = $this->get_option( 'pickup_city' );
@@ -241,7 +241,7 @@ class GIGL_Delivery_Shipping_Method extends WC_Shipping_Method {
 		$pickup_country       = 'Nigeria';
 
 		$pickup_address = trim(
-			"$pickup_base_address, $pickup_city, $pickup_state, $pickup_country"
+			"$pickup_city, $pickup_state, $pickup_country"
 		);
 
 		$delivery_coordinate = $api->get_lat_lng( $delivery_address );
@@ -261,8 +261,10 @@ class GIGL_Delivery_Shipping_Method extends WC_Shipping_Method {
 			'ReceiverStationId' => 1,
 			'VehicleType'       => 1,
 			'ReceiverLocation'  => array(
+				// 'Latitude'  => '6.5583775',
 				'Latitude'  => $delivery_coordinate['Latitude'],
 				'Longitude' => $delivery_coordinate['Longitude'],
+				// 'Longitude' => '3.3983414',
 			),
 			'SenderLocation'    => array(
 				'Latitude'  => $pickup_coordinate['Latitude'],
@@ -275,6 +277,7 @@ class GIGL_Delivery_Shipping_Method extends WC_Shipping_Method {
 
 		try {
 			$res = $api->calculate_pricing( $params );
+			// print_r($res);
 		} catch ( Exception $e ) {
 			wc_add_notice(
 				__( 'Gig Logistics Delivery pricing calculation could not complete.', 'gig-logistics-delivery' ),
@@ -287,14 +290,14 @@ class GIGL_Delivery_Shipping_Method extends WC_Shipping_Method {
 			return;
 		}
 
-		$cost = wc_format_decimal( $res->data->DeliverPrice );
+		$cost = wc_format_decimal( $res->data->GrandTotal );
 
 		$this->add_rate( array(
 			'id'    => $this->id . $this->instance_id,
 			'label' => $this->title,
 			'cost'  => $cost,
 			'meta_data' => array(
-				'per_task_cost'        => $res->data->DeliverPrice,
+				'per_task_cost'        => $res->data->GrandTotal / count( $preShipmentItems ),
 				'insurance_amount'     => $res->data->InsuranceValue ?? 0,
 				'total_no_of_tasks'    => count( $preShipmentItems ),
 				'total_service_charge' => $res->data->vat ?? 0,

@@ -112,6 +112,7 @@
 				$this->vendor_login($this->username, $this->password);
 				$access_token = $this->login_credentials->data->{'access-token'};
 			}
+			
 			// $params['UserId'] = $this->login_credentials->data->userId;
 			$params['CustomerCode'] = $this->login_credentials->data->UserChannelCode; 
 			
@@ -127,18 +128,20 @@
 			// $coordinate['Latitude']  =  '6.61';
 			// 	$coordinate['Longitude'] ='3.35';
 			// return $coordinate;
+			
 			if (!empty($address)) {
-			   $address = 'https://nominatim.openstreetmap.org/search?q='.urlencode($address).'&format=json&limit=1';
+			   $address = 'https://api.latlng.work/api?q='.urlencode($address);
 			   $params = array();
-			   $geocodeResponse = $this->api_request($address, $params,'GET');
-				
-			   if(isset($geocodeResponse[0]->lat)){
-				$coordinate['Latitude']  = (!empty($geocodeResponse)) ? $geocodeResponse[0]->lat : '';
-				$coordinate['Longitude'] = (!empty($geocodeResponse)) ? $geocodeResponse[0]->lon : '';
+			   $geocodeResponse = $this->api_request($address, $params,'GET', 'latlng_5ylwu0sjwjyuzs3d59bhbq4p9wg1nl4x');
+			   if(isset($geocodeResponse->features[0]->geometry->coordinates)){
+				$coordinate['Latitude']  = (!empty($geocodeResponse)) ? $geocodeResponse->features[0]->geometry->coordinates[1] : '';
+				$coordinate['Longitude'] = (!empty($geocodeResponse)) ? $geocodeResponse->features[0]->geometry->coordinates[0] : '';
 			   }else{
 				$coordinate['Latitude']  =  '6.61';
 				$coordinate['Longitude'] ='3.35';
 			   }
+			   	// $coordinate['Latitude']  =  '6.61';
+				// $coordinate['Longitude'] ='3.35';
 			}else{
 				// $coordinate =  array();
 				$coordinate['Latitude']  =  '6.61';
@@ -186,7 +189,7 @@
 				 	'method'      => $method,
         			'timeout'     => 260,
         			'sslverify'   => false,
-        			'headers'     => $this->get_headers($token),
+        			'headers'     => $this->get_headers($token, $endpoint),
         			'body'        => json_encode($args),
 
 				 );
@@ -194,7 +197,7 @@
 					$arg = array(
 					   'timeout'     => 260,
 					   'sslverify'   => false,
-					   'headers'     => $this->get_headers($token),
+					   'headers'     => $this->get_headers($token, $endpoint),
 					);
 					
 					$getApiResponse = wp_remote_get( $uri, $arg );
@@ -215,9 +218,12 @@
 		/**
 			* Generates the headers to pass to API request.
 		*/
-		public function get_headers($token)
-		{
-			if(!empty($token)){
+		public function get_headers($token, $endpoint)
+		{	
+			if(strpos($endpoint, "https://api.latlng.work/api") !== false){
+				$getHead = array('X-Api-Key'  => $token, 'Content-Type'  => 'application/json',);
+				return $getHead;
+			}else if(!empty($token)){
 				$getHead = array(
             'access-token' => "{$token}",
             'Content-Type'  => 'application/json',
