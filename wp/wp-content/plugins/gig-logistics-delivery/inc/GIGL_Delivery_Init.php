@@ -13,10 +13,10 @@ final class GIGL_Delivery_Init
 	public static function get_services() 
 	{
 		return [
-			BaseHandlerLocateFiles\Settings_Links_Handler_Class::class,
-			PagesHandlerLocateFiles\Admin_GIGL_Handler_Class::class,
-			BaseHandlerLocateFiles\Enqueue_Class_Files_Handler::class,
-			PagesHandlerLocateFiles\Deliver_Loader_Handler_Class::class
+			BaseHandlerLocateFiles\GIGL_Delivery_Settings_Links::class,
+			PagesHandlerLocateFiles\GIGL_Delivery_Admin::class,
+			BaseHandlerLocateFiles\GIGL_Delivery_Enqueue::class,
+			PagesHandlerLocateFiles\GIGL_Delivery_Loader::class
 		];
 	}
 

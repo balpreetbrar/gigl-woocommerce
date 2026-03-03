@@ -9,10 +9,10 @@ defined('ABSPATH') or die('Hey, what are you doing here? You silly human!');
  *
  * @since 1.0
  */
-class WC_Gig_Logistics_Delivery_Orders
+class GIGL_Delivery_Orders
 {
 
-	/** @var \WC_Gig_Logistics_Delivery_Orders single instance of this class */
+	/** @var \GIGL_Delivery_Orders single instance of this class */
 	private static $instance;
 
 	/**
@@ -32,7 +32,7 @@ class WC_Gig_Logistics_Delivery_Orders
 
 		// process order meta box order actions
 		add_action(
-			'woocommerce_order_action_wc_gig_logistics_delivery_update_status',
+			'woocommerce_order_action_GIGL_Delivery_Main_update_status',
 			array($this, 'process_order_meta_box_actions')
 		);
 
@@ -52,9 +52,6 @@ class WC_Gig_Logistics_Delivery_Orders
         return;
     }
 
-    if ( ! isset( $_GET['post_type'] ) || 'shop_order' !== $_GET['post_type'] ) {
-        return;
-    }
 
     wp_enqueue_script(
         'gigl-admin-script',
@@ -108,7 +105,7 @@ class WC_Gig_Logistics_Delivery_Orders
 
 			foreach ($order_ids as $order_id) {
 				try {
-					wc_gig_logistics_delivery()->update_order_shipping_status($order_id);
+					GIGL_Delivery_Main()->update_order_shipping_status($order_id);
 				} catch (\Exception $e) {
 					// Optional: log error if needed
 				}
@@ -126,7 +123,7 @@ class WC_Gig_Logistics_Delivery_Orders
 	public function add_order_meta_box_actions($actions)
 	{
 
-		$actions['wc_gig_logistics_delivery_update_status'] =
+		$actions['GIGL_Delivery_Main_update_status'] =
 			__('Update Order Status (via gigl delivery)', 'gig-logistics-delivery');
 
 		return $actions;
@@ -141,7 +138,7 @@ class WC_Gig_Logistics_Delivery_Orders
 	public function process_order_meta_box_actions($order)
 	{
 
-		wc_gig_logistics_delivery()->update_order_shipping_status($order);
+		GIGL_Delivery_Main()->update_order_shipping_status($order);
 	}
 
 	/**
@@ -153,7 +150,7 @@ class WC_Gig_Logistics_Delivery_Orders
 	{
 
 		add_meta_box(
-			'wc_gig_logistics_delivery_order_meta_box',
+			'GIGL_Delivery_Main_order_meta_box',
 			__('Gig Logistics Delivery', 'gig-logistics-delivery'),
 			array($this, 'render_order_meta_box'),
 			'shop_order',
@@ -187,7 +184,7 @@ class WC_Gig_Logistics_Delivery_Orders
 		$gigl_order_id = $order->get_meta('gig_logistics_delivery_waybill');
 		?>
 
-		<table id="wc_gig_logistics_delivery_order_meta_box">
+		<table id="GIGL_Delivery_Main_order_meta_box">
 			<tr>
 				<th><strong><?php esc_html_e('Way-bill', 'gig-logistics-delivery'); ?> :</strong></th>
 				<td><?php echo esc_html(empty($gigl_order_id) ? __('N/A', 'gig-logistics-delivery') : $gigl_order_id); ?>
@@ -221,7 +218,7 @@ class WC_Gig_Logistics_Delivery_Orders
 	/**
 	 * Gets the main loader instance.
 	 *
-	 * @return \WC_Gig_Logistics_Delivery_Orders
+	 * @return \GIGL_Delivery_Orders
 	 */
 	public static function instance()
 	{
@@ -235,4 +232,4 @@ class WC_Gig_Logistics_Delivery_Orders
 }
 
 // fire it up!
-return WC_Gig_Logistics_Delivery_Orders::instance();
+return GIGL_Delivery_Orders::instance();

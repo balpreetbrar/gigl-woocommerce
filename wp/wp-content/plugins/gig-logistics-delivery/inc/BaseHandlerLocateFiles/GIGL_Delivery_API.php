@@ -2,7 +2,7 @@
 	
 	defined( 'ABSPATH' ) or die( 'Hey, what are you doing here? You silly human!' );
 	
-	class WC_Gig_Logistics_Delivery_API
+	class GIGL_Delivery_API
 	{
 		protected $env;
 		
@@ -67,7 +67,6 @@
                 $params
 				);
 				$login_credentials = $response;
-				
 				//set transient
 				set_transient('giglode_login_credentials', $login_credentials, (HOUR_IN_SECONDS / 24)); // set transient for 5 mins to 9 mins
 				

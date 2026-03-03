@@ -4,10 +4,10 @@
  */
 namespace IncGiGl\BaseHandlerLocateFiles;
 
-use \IncGiGl\BaseHandlerLocateFiles\Base_Controller_Handler_Class;
+use \IncGiGl\BaseHandlerLocateFiles\GIGL_Delivery_Base_Controller;
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-class Settings_Links_Handler_Class extends Base_Controller_Handler_Class
+class GIGL_Delivery_Settings_Links extends GIGL_Delivery_Base_Controller
 {	
 	
 	

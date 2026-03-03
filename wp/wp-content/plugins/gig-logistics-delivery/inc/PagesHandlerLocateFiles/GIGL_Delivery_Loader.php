@@ -3,12 +3,12 @@
 	/**
 		* Main Gig Logistics Delivery Class.
 		*
-		* @class  Deliver_Loader_Handler_class
+		* @class  GIGL_Delivery_Loader
 	*/
 	namespace IncGiGl\PagesHandlerLocateFiles;	
 
 	defined( 'ABSPATH' ) or die( 'Hey, what are you doing here? You silly human!' );
-	class Deliver_Loader_Handler_Class
+	class GIGL_Delivery_Loader
 	{
 		private static $active_plugins;
 		public function register(){
@@ -31,8 +31,8 @@
 		{
 			
 			// load the main plugin class
-			require_once(plugin_dir_path(__FILE__) . 'WC_Gig_Logistics_Delivery.php');
+			require_once(plugin_dir_path(__FILE__) . 'GIGL_Delivery_Main.php');
 			
-			wc_gig_logistics_delivery();
+			GIGL_Delivery_Main();
 		}
 	}

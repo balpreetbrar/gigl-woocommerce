@@ -9,7 +9,7 @@ defined( 'ABSPATH' ) || exit;
  *
  * @extends WC_Shipping_Method
  */
-class WC_Gig_Logistics_Delivery_Shipping_Method extends WC_Shipping_Method {
+class GIGL_Delivery_Shipping_Method extends WC_Shipping_Method {
 
 	public function __construct( $instance_id = 0 ) {
 
@@ -180,7 +180,7 @@ class WC_Gig_Logistics_Delivery_Shipping_Method extends WC_Shipping_Method {
 		}
 
 		try {
-			$api = wc_gig_logistics_delivery()->get_api();
+			$api = GIGL_Delivery_Main()->get_api();
 		} catch ( Exception $e ) {
 			wc_add_notice(
 				__( 'Gig Logistics Delivery shipping method could not set up.', 'gig-logistics-delivery' ),

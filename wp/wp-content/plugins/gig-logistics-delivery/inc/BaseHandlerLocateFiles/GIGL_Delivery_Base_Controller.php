@@ -4,7 +4,7 @@
  */
 namespace IncGiGl\BaseHandlerLocateFiles;
 
-class Base_Controller_Handler_Class
+class GIGL_Delivery_Base_Controller
 {
 	public $plugin_path;
 

@@ -4,13 +4,13 @@
  */
 namespace IncGiGl\PagesHandlerLocateFiles;
 
-use \IncGiGl\BaseHandlerLocateFiles\Base_Controller_Handler_Class;
+use \IncGiGl\BaseHandlerLocateFiles\GIGL_Delivery_Base_Controller;
 use \IncGiGl\ApiHandlerLocateFiles\GIGL_Delivery_Settings_API;
 
 /**
 * 
 */
-class Admin_GIGL_Handler_Class extends Base_Controller_Handler_Class
+class GIGL_Delivery_Admin extends GIGL_Delivery_Base_Controller
 {
 	public $settings;
 

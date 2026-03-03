@@ -1,3 +1,4 @@
+
 jQuery(document).ready(function(){
 	var getMode = jQuery('.gigl_mode').val();
 		if(getMode == 'live'){
