@@ -2,7 +2,7 @@
 /**
  * @package  GIGLDelivery
  */
-namespace IncGiGl\ApiHandlerLocateFiles;
+namespace GIGLODE\ApiHandlerLocateFiles;
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 class GIGL_Delivery_Settings_API

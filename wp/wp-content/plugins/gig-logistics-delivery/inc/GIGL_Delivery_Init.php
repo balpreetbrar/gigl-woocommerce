@@ -2,7 +2,7 @@
 /**
  * @package  GIGLDelivery
  */
-namespace IncGiGl;
+namespace GIGLODE;
 
 final class GIGL_Delivery_Init
 {

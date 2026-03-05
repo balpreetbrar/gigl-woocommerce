@@ -3,9 +3,9 @@
  * @package GIGLDelivery
  */
 
-namespace IncGiGl\BaseHandlerLocateFiles;
+namespace GIGLODE\BaseHandlerLocateFiles;
 
-use IncGiGl\BaseHandlerLocateFiles\GIGL_Delivery_Base_Controller;
+use GIGLODE\BaseHandlerLocateFiles\GIGL_Delivery_Base_Controller;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

@@ -5,7 +5,7 @@
 		*
 		* @class  GIGL_Delivery_Loader
 	*/
-	namespace IncGiGl\PagesHandlerLocateFiles;	
+	namespace GIGLODE\PagesHandlerLocateFiles;	
 
 	defined( 'ABSPATH' ) or die( 'Hey, what are you doing here? You silly human!' );
 	class GIGL_Delivery_Loader

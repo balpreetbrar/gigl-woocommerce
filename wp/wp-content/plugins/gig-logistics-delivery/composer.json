@@ -12,6 +12,6 @@
     "minimum-stability": "dev",
     "require": {},
     "autoload": {
-        "psr-4": {"IncGiGl\\": "./inc"}
+        "psr-4": {"GIGLODE\\": "./inc"}
     }
 }

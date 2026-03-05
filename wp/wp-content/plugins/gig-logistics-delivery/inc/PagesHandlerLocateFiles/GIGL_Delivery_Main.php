@@ -390,16 +390,16 @@ class GIGL_Delivery_Main
 				}
 			}
 			$receiverLocation = array(
-				"Latitude" => $delivery_coordinate['Latitude'],
-				"Longitude" => $delivery_coordinate['Longitude'],
+				"Latitude" => (string) $delivery_coordinate['Latitude'],
+				"Longitude" => (string) $delivery_coordinate['Longitude'],
 				"FormattedAddress" => "",
 				"Name" => "",
 				"LGA" => ""
 			);
 
 			$senderLocation = array(
-				"Latitude" => $pickup_coordinate['Latitude'],
-				"Longitude" => $pickup_coordinate['Longitude'],
+				"Latitude" => (string) $pickup_coordinate['Latitude'],
+				"Longitude" => (string) $pickup_coordinate['Longitude'],
 				"FormattedAddress" => "",
 				"Name" => "",
 				"LGA" => ""
@@ -461,7 +461,6 @@ class GIGL_Delivery_Main
 
 
 			$response = $api->create_task($params);
-
 			$order->add_order_note("Gig Logistics Delivery: " . $response->data->message);
 			$_SESSION['bogus'] = 'bogus';
 
@@ -469,7 +468,7 @@ class GIGL_Delivery_Main
 				if ($this->settings['mode'] == 'test') {
 					$endpoint = 'https://dev-thirdpartynode.theagilitysystems.com/track/mobileShipment?Waybill=';
 				} else {
-					$endpoint = 'https://prod-agilitythirdpartyapi.theagilitysystems.com/api/thirdParty?Waybill=';
+					$endpoint = 'https://thirdpartynode.theagilitysystems.com/track/mobileShipment?Waybill=';
 				}
 				$_SESSION['reques'] = $response->data->Waybill;
 				//$data = $res['data'];

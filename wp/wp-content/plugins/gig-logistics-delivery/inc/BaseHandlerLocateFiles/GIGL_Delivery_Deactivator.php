@@ -2,7 +2,7 @@
 /**
  * @package  GIGLDelivery
  */
-namespace IncGiGl\BaseHandlerLocateFiles;
+namespace GIGLODE\BaseHandlerLocateFiles;
 
 class GIGL_Delivery_Deactivator
 {

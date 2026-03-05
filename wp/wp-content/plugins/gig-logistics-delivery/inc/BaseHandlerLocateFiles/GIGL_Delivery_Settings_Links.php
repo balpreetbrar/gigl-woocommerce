@@ -2,9 +2,9 @@
 /**
  * @package  GIGLDelivery
  */
-namespace IncGiGl\BaseHandlerLocateFiles;
+namespace GIGLODE\BaseHandlerLocateFiles;
 
-use \IncGiGl\BaseHandlerLocateFiles\GIGL_Delivery_Base_Controller;
+use \GIGLODE\BaseHandlerLocateFiles\GIGL_Delivery_Base_Controller;
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 class GIGL_Delivery_Settings_Links extends GIGL_Delivery_Base_Controller

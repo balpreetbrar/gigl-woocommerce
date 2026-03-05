@@ -2,10 +2,10 @@
 /**
  * @package  GIGLDelivery
  */
-namespace IncGiGl\PagesHandlerLocateFiles;
+namespace GIGLODE\PagesHandlerLocateFiles;
 
-use \IncGiGl\BaseHandlerLocateFiles\GIGL_Delivery_Base_Controller;
-use \IncGiGl\ApiHandlerLocateFiles\GIGL_Delivery_Settings_API;
+use \GIGLODE\BaseHandlerLocateFiles\GIGL_Delivery_Base_Controller;
+use \GIGLODE\ApiHandlerLocateFiles\GIGL_Delivery_Settings_API;
 
 /**
 * 
