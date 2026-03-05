@@ -1,15 +1,15 @@
 === GIG Logistics Delivery ===
 Contributors: gigl
-Tags: woocommerce, shipping, delivery, gig logistics, nigeria shipping
-Requires at least: 6.5
+Tags: woocommerce, shipping, logistics, delivery, order tracking
+Requires at least: 6.0
 Tested up to: 6.9
-Requires PHP: 7.2.24
+Requires PHP: 7.2
+Requires Plugins: woocommerce
 Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Integrate GIG Logistics shipping with WooCommerce to calculate real-time rates, schedule shipments, and support cash on delivery.
-
+Integrate GIG Logistics shipping with WooCommerce for real-time rates, shipment scheduling, tracking, and cash on delivery.
 == Description ==
 
 GIG Logistics Delivery allows online store owners to integrate GIG Logistics (GIGL) shipping services directly into their WooCommerce checkout process.
@@ -86,17 +86,13 @@ Click "Save Changes" after updating settings.
 6. Save changes.
 7. Test checkout to confirm shipping rates appear.
 
-== External Services ==
 
 == External Services ==
 
 This plugin connects to the official GIG Logistics (GIGL) Shipping API to provide shipping rate calculation, shipment scheduling, tracking, and cash on delivery services inside WooCommerce.
 
-Service Provider:
-GIG Logistics
-
-Official Website:
-https://giglogistics.com/
+**Service Provider:** GIG Logistics  
+**Website:** https://giglogistics.com
 
 API Domains Used by This Plugin:
 
@@ -107,7 +103,6 @@ https://dev-thirdpartynode.theagilitysystems.com/
 
 Production Environments:
 https://thirdpartynode.theagilitysystems.com/
-https://prod-agilitythirdpartyapi.theagilitysystems.com/
 
 These domains are official GIG Logistics API endpoints operated by GIG Logistics.  
 All data transmitted to these domains is governed by GIG Logistics' Terms of Service and Privacy Policy listed below.

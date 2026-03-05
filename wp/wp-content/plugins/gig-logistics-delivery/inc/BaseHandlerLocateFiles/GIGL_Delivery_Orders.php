@@ -45,30 +45,31 @@ class GIGL_Delivery_Orders
 	 *
 	 * @since 1.0
 	 */
-	public function enqueue_admin_scripts( $hook ) {
+	public function enqueue_admin_scripts($hook)
+	{
 
-    // Only load on WooCommerce Orders list page
-    if ( 'edit.php' !== $hook ) {
-        return;
-    }
+		// Only load on WooCommerce Orders list page
+		if ('edit.php' !== $hook) {
+			return;
+		}
 
 
-    wp_enqueue_script(
-        'gigl-admin-script',
-        GIGL_PLUGIN_URL . 'assets/js/gigl-admin.js',
-        array( 'jquery' ),
-        '1.0.0',
-        true
-    );
+		wp_enqueue_script(
+			'gigl-admin-script',
+			GIGL_PLUGIN_URL . 'assets/js/gigl-admin.js',
+			array('jquery'),
+			'1.0.0',
+			true
+		);
 
-    wp_localize_script(
-        'gigl-admin-script',
-        'gigl_admin',
-        array(
-            'bulk_action_label' => __( 'Update Order Status (via gigl delivery)', 'gig-logistics-delivery' ),
-        )
-    );
-}
+		wp_localize_script(
+			'gigl-admin-script',
+			'gigl_admin',
+			array(
+				'bulk_action_label' => __('Update Order Status (via gigl delivery)', 'gig-logistics-delivery'),
+			)
+		);
+	}
 
 	/**
 	 * Processes the bulk action
@@ -90,9 +91,21 @@ class GIGL_Delivery_Orders
 			}
 
 			check_admin_referer('bulk-posts');
+			if (
+				!isset($_REQUEST['_wpnonce']) ||
+				!wp_verify_nonce(
+					sanitize_text_field(wp_unslash($_REQUEST['_wpnonce'])),
+					'bulk-posts'
+				)
+			) {
+				return;
+			}
+			if (isset($_REQUEST['post']) && is_array($_REQUEST['post'])) {
 
-			if (isset($_REQUEST['post'])) {
-				$order_ids = array_map('absint', $_REQUEST['post']);
+				$order_ids = array_map(
+					'absint',
+					wp_unslash($_REQUEST['post'])
+				);
 			}
 
 			if (empty($order_ids)) {

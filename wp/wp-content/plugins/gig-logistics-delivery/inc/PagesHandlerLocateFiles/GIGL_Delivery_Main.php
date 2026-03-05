@@ -222,7 +222,8 @@ class GIGL_Delivery_Main
 		}
 		// $order_status    = $order->get_status();
 		$order_items = $order->get_items();
-		$shipping_method = @array_shift($order->get_shipping_methods());
+		$methods = $order->get_shipping_methods();
+		$shipping_method = !empty($methods) ? array_shift($methods) : null;
 
 		if (strpos($shipping_method->get_method_id(), 'gig_logistics_delivery') !== false) {
 
@@ -461,8 +462,8 @@ class GIGL_Delivery_Main
 
 
 			$response = $api->create_task($params);
-			$order->add_order_note("Gig Logistics Delivery: " . $response->data->message);
-			$_SESSION['bogus'] = 'bogus';
+			$order->add_order_note("Gig Logistics Delivery: " . $response->message);
+			
 
 			if (isset($response->data->Waybill)) {
 				if ($this->settings['mode'] == 'test') {
@@ -470,7 +471,7 @@ class GIGL_Delivery_Main
 				} else {
 					$endpoint = 'https://thirdpartynode.theagilitysystems.com/track/mobileShipment?Waybill=';
 				}
-				$_SESSION['reques'] = $response->data->Waybill;
+				
 				//$data = $res['data'];
 				$this->currentWaybill = $response->data->Waybill;
 				update_post_meta($order_id, 'gig_logistics_delivery_waybill', $response->data->Waybill);
