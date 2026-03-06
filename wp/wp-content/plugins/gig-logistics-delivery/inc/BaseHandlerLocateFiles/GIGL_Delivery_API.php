@@ -17,8 +17,7 @@
 		public function __construct($settings = array())
 		{
 			$this->env = isset($settings['mode']) ? $settings['mode'] : 'test';
-			
-			if ($this->env == 'Live') {
+			if ($this->env == 'Live' || $this->env == 'live') {
 				$username    = isset($settings['live_username']) ? $settings['live_username'] : '';
 				$password = isset($settings['live_password']) ? $settings['live_password'] : '';    
 				

@@ -466,7 +466,7 @@ class GIGL_Delivery_Main
 			
 
 			if (isset($response->data->Waybill)) {
-				if ($this->settings['mode'] == 'test') {
+				if ($this->settings['mode'] == 'test' || $this->settings['mode'] == 'Test') {
 					$endpoint = 'https://dev-thirdpartynode.theagilitysystems.com/track/mobileShipment?Waybill=';
 				} else {
 					$endpoint = 'https://thirdpartynode.theagilitysystems.com/track/mobileShipment?Waybill=';
