@@ -113,13 +113,13 @@
 			}
 			
 			// $params['UserId'] = $this->login_credentials->data->userId;
-			$params['CustomerCode'] = $this->login_credentials->data->UserChannelCode; 
+			// $params['CustomerCode'] = $this->login_credentials->data->UserChannelCode; 
 			
          	// $params['ReceiverStationId'] = "1";
           	// $params['SenderStationId'] = "1";
 			
 
-			return $this->api_request('price', $params, 'POST', $access_token);
+			return $this->api_request('price/v3', $params, 'POST', $access_token);
 		}
 		
 		public function get_lat_lng($address)
@@ -136,15 +136,15 @@
 				$coordinate['Latitude']  = (!empty($geocodeResponse)) ? $geocodeResponse->features[0]->geometry->coordinates[1] : '';
 				$coordinate['Longitude'] = (!empty($geocodeResponse)) ? $geocodeResponse->features[0]->geometry->coordinates[0] : '';
 			   }else{
-				$coordinate['Latitude']  =  '6.61';
-				$coordinate['Longitude'] ='3.35';
+				// $coordinate['Latitude']  =  '';
+				// $coordinate['Longitude'] ='';
 			   }
 			   	// $coordinate['Latitude']  =  '6.61';
 				// $coordinate['Longitude'] ='3.35';
 			}else{
 				// $coordinate =  array();
-				$coordinate['Latitude']  =  '6.61';
-				$coordinate['Longitude'] ='3.35';
+				// $coordinate['Latitude']  =  '';
+				// $coordinate['Longitude'] ='';
 			   }
 			
 			// $access_token = $this->login_credentials->data->token;

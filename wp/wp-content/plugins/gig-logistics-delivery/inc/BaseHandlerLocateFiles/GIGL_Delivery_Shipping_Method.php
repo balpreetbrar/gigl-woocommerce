@@ -190,6 +190,7 @@ class GIGL_Delivery_Shipping_Method extends WC_Shipping_Method {
 		}
 
 		$delivery_country_code = $package['destination']['country'];
+		print_r($package);
 		$delivery_state_code   = $package['destination']['state'];
 		$delivery_city         = $package['destination']['city'];
 		$delivery_postcode     = isset( $package['destination']['postcode'] ) ? $package['destination']['postcode'] : '';
@@ -230,35 +231,127 @@ class GIGL_Delivery_Shipping_Method extends WC_Shipping_Method {
 			return;
 		}
 
-		$delivery_address = trim(
-			"$delivery_city, $delivery_state, $delivery_country"
-		);
 
 		$pickup_city          = $this->get_option( 'pickup_city' );
 		$pickup_state         = $this->get_option( 'pickup_state' );
 		$pickup_postcode      = $this->get_option( 'pickup_postcode' );
 		$pickup_base_address  = $this->get_option( 'pickup_base_address' );
 		$pickup_country       = 'Nigeria';
+		// $delivery_address = trim(
+		// 	"$delivery_base_address, $delivery_city, $delivery_state, $delivery_country"
+		// );
+		
 
-		$pickup_address = trim(
-			"$pickup_city, $pickup_state, $pickup_country"
-		);
+		
 
-		$delivery_coordinate = $api->get_lat_lng( $delivery_address );
-		$pickup_coordinate   = $api->get_lat_lng( $pickup_address );
+		// $pickup_address = trim(
+		// 	"$pickup_base_address,$pickup_city, $pickup_state, $pickup_country"
+		// );
 
-		if (
-			empty( $delivery_coordinate['Latitude'] ) ||
-			empty( $delivery_coordinate['Longitude'] ) ||
-			empty( $pickup_coordinate['Latitude'] ) ||
-			empty( $pickup_coordinate['Longitude'] )
-		) {
-			return;
-		}
+		// $delivery_coordinate = $api->get_lat_lng( $delivery_address );
+		// $pickup_coordinate   = $api->get_lat_lng( $pickup_address );
+
+		// if (
+		// 	empty( $delivery_coordinate['Latitude'] ) ||
+		// 	empty( $delivery_coordinate['Longitude'] ) )
+		// ) {
+		// 	//after removing base address and fetching latlng again
+		// 	$delivery_address = trim(
+		// 	"$delivery_city, $delivery_state, $delivery_country"
+		// );
+		// 	$delivery_coordinate = $api->get_lat_lng($delivery_address);
+		// }
+		// if (
+		// 	empty( $pickup_coordinate['Latitude'] ) ||
+		// 	empty( $pickup_coordinate['Longitude'] )
+		// ) {
+		// 	//after removing base address and fetching latlng again
+		// 	$pickup_address = trim(
+		// 	"$pickup_city, $pickup_state, $pickup_country"
+		// );
+		// 		$pickup_coordinate   = $api->get_lat_lng( $pickup_address );
+		// }
+		// if (
+		// 	empty( $delivery_coordinate['Latitude'] ) ||
+		// 	empty( $delivery_coordinate['Longitude'] ) ||
+		// 	empty( $pickup_coordinate['Latitude'] ) ||
+		// 	empty( $pickup_coordinate['Longitude'] )
+		// ) {
+		// 	return;
+		// }
+		if($delivery_postcode == '' || empty($delivery_postcode)) { 
+					$delivery_address1 = (($delivery_city) ? ("$delivery_city,") : '') . (($delivery_state) ? ("$delivery_state,") : ''). 'Nigeria';
+					$delivery_address = (($delivery_base_address) ? ("$delivery_base_address,") : '') . (($delivery_city) ? ("$delivery_city,") : '') . (($delivery_state) ? ("$delivery_state,") : ''). 'Nigeria';
+					
+					$delivery_coordinate = $api->get_lat_lng($delivery_address);
+					
+					if (!isset($delivery_coordinate['Latitude']) || !isset($delivery_coordinate['Longitude'])) {
+						$delivery_coordinate = $api->get_lat_lng($delivery_address1);
+						
+					}
+					
+					if (!isset($delivery_coordinate['Latitude']) && !isset($delivery_coordinate['Longitude'])) {
+						$delivery_coordinate = $api->get_lat_lng("$delivery_state, $delivery_country");
+					}
+					
+					$pickup_address = (($pickup_base_address) ? ("$pickup_base_address,") : '') . (($pickup_city) ? ("$pickup_city,") : '') . (($pickup_state) ? ("$pickup_state,") : '') . 'nigeria';
+					$pickup_address1 = (($pickup_city) ? ("$pickup_city,") : '') . (($pickup_state) ? ("$pickup_state,") : '') . 'nigeria';
+
+					$pickup_coordinate = $api->get_lat_lng($pickup_address);
+					if (!isset($pickup_coordinate['Latitude']) && !isset($pickup_coordinate['Longitude'])) {
+						$pickup_coordinate = $api->get_lat_lng($pickup_address1);
+					}
+					if (!isset($pickup_coordinate['Latitude']) && !isset($pickup_coordinate['Longitude'])) {
+						$pickup_coordinate = $api->get_lat_lng("$pickup_state, $pickup_country");
+					}
+					
+					
+				
+				}else {
+				
+					$delivery_address = (($delivery_postcode) ? ("$delivery_postcode,") : '') . (($delivery_city) ? ("$delivery_city,") : '') . (($delivery_state) ? ("$delivery_state,") : ''). 'Nigeria';
+					//$delivery_address = trim("$delivery_address");
+					$delivery_address1 = (($delivery_postcode) ? ("$delivery_postcode,") : '') . (($delivery_base_address) ? ("$delivery_base_address,") : '') . (($delivery_city) ? ("$delivery_city,") : '') . (($delivery_state) ? ("$delivery_state,") : ''). 'Nigeria';
+					$delivery_address2 = (($delivery_postcode) ? ("$delivery_postcode,") : '') . (($delivery_state) ? ("$delivery_state,") : ''). 'Nigeria';
+					$delivery_address3 = (($delivery_city) ? ("$delivery_city,") : '') . (($delivery_state) ? ("$delivery_state,") : ''). 'Nigeria';
+					//$delivery_addressd = trim("$delivery_base_address $delivery_city, $delivery_state, $delivery_country,$delivery_postcode");
+					$delivery_coordinate = $api->get_lat_lng($delivery_address);
+					
+					if (!isset($delivery_coordinate['Latitude']) && !isset($delivery_coordinate['Longitude'])) {
+						$delivery_coordinate = $api->get_lat_lng("$delivery_address");
+					}
+					if (!isset($delivery_coordinate['Latitude']) && !isset($delivery_coordinate['Longitude'])) {
+						$delivery_coordinate = $api->get_lat_lng("$delivery_address1");
+					}
+					if (!isset($delivery_coordinate['Latitude']) && !isset($delivery_coordinate['Longitude'])) {
+						$delivery_coordinate = $api->get_lat_lng("$delivery_address2");
+					}
+					if (!isset($delivery_coordinate['Latitude']) && !isset($delivery_coordinate['Longitude'])) {
+						$delivery_coordinate = $api->get_lat_lng("$delivery_address3");
+					}
+					
+					$pickup_address = (($pickup_postcode) ? ("$pickup_postcode,") : '') . (($pickup_city) ? ("$pickup_city,") : '') . (($pickup_state) ? ("$pickup_state,") : ''). 'Nigeria';
+					$pickup_address1 = (($pickup_postcode) ? ("$pickup_postcode,") : '') . (($pickup_state) ? ("$pickup_state,") : ''). 'Nigeria';
+					$pickup_address2 = (($pickup_city) ? ("$pickup_city,") : '') . (($pickup_state) ? ("$pickup_state,") : ''). 'Nigeria';
+					$pickup_address = trim("$pickup_address");
+					
+					$pickup_coordinate = $api->get_lat_lng($pickup_address);
+					
+					if (!isset($pickup_coordinate['Latitude']) && !isset($pickup_coordinate['Longitude'])) {
+						$pickup_coordinate = $api->get_lat_lng("$pickup_address");
+					}
+					if (!isset($pickup_coordinate['Latitude']) && !isset($pickup_coordinate['Longitude'])) {
+						$pickup_coordinate = $api->get_lat_lng("$pickup_address1");
+					}
+					if (!isset($pickup_coordinate['Latitude']) && !isset($pickup_coordinate['Longitude'])) {
+						$pickup_coordinate = $api->get_lat_lng("$pickup_address2");
+					}
+					
+				}
 
 		$params = array(
-			'SenderStationId'   => 1,
-			'ReceiverStationId' => 1,
+			// 'SenderStationId'   => 1,
+			// 'ReceiverStationId' => 1,
 			'VehicleType'       => 1,
 			'ReceiverLocation'  => array(
 				// 'Latitude'  => '6.5583775',
@@ -270,7 +363,8 @@ class GIGL_Delivery_Shipping_Method extends WC_Shipping_Method {
 				'Latitude'  => $pickup_coordinate['Latitude'],
 				'Longitude' => $pickup_coordinate['Longitude'],
 			),
-			'CustomerType'      => 0,
+			// 'CustomerType'      => 0,
+			'IsPriorityShipment' => false,
 			'PickUpOptions'     => 1,
 			'ShipmentItems'     => $preShipmentItems,
 		);
@@ -286,7 +380,7 @@ class GIGL_Delivery_Shipping_Method extends WC_Shipping_Method {
 			return;
 		}
 
-		if ( empty( $res->data->DeliverPrice ) ) {
+		if ( empty( $res->data->GrandTotal ) ) {
 			return;
 		}
 

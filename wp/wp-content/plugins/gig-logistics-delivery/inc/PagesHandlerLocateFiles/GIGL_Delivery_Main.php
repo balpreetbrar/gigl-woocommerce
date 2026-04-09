@@ -340,24 +340,24 @@ class GIGL_Delivery_Main
 
 				$delivery_coordinate = $api->get_lat_lng($delivery_address);
 
-				// if (!isset($delivery_coordinate['Latitude']) && !isset($delivery_coordinate['Longitude'])) {
-				// 	$delivery_coordinate = $api->get_lat_lng($delivery_address1);
-				// }
-				// if (!isset($delivery_coordinate['Latitude']) && !isset($delivery_coordinate['Longitude'])) {
-				// 	$delivery_coordinate = $api->get_lat_lng("$delivery_state, $delivery_country");
-				// }
+				if (!isset($delivery_coordinate['Latitude']) && !isset($delivery_coordinate['Longitude'])) {
+					$delivery_coordinate = $api->get_lat_lng($delivery_address1);
+				}
+				if (!isset($delivery_coordinate['Latitude']) && !isset($delivery_coordinate['Longitude'])) {
+					$delivery_coordinate = $api->get_lat_lng("$delivery_state, $delivery_country");
+				}
 
 				$pickup_address = (($pickup_base_address) ? ("$pickup_base_address,") : '') . (($pickup_city) ? ("$pickup_city,") : '') . (($pickup_state) ? ("$pickup_state,") : '') . 'nigeria';
 				$pickup_address1 = (($pickup_city) ? ("$pickup_city,") : '') . (($pickup_state) ? ("$pickup_state,") : '') . 'nigeria';
 
 				$pickup_coordinate = $api->get_lat_lng($pickup_address);
 
-				// if (!isset($pickup_coordinate['Latitude']) && !isset($pickup_coordinate['Longitude'])) {
-				// 	$pickup_coordinate = $api->get_lat_lng($pickup_address1);
-				// }
-				// if (!isset($pickup_coordinate['Latitude']) && !isset($pickup_coordinate['Longitude'])) {
-				// 	$pickup_coordinate = $api->get_lat_lng("$pickup_state, $pickup_country");
-				// }
+				if (!isset($pickup_coordinate['Latitude']) && !isset($pickup_coordinate['Longitude'])) {
+					$pickup_coordinate = $api->get_lat_lng($pickup_address1);
+				}
+				if (!isset($pickup_coordinate['Latitude']) && !isset($pickup_coordinate['Longitude'])) {
+					$pickup_coordinate = $api->get_lat_lng("$pickup_state, $pickup_country");
+				}
 
 			} else {
 
@@ -416,14 +416,14 @@ class GIGL_Delivery_Main
 				"SenderDetails" => [
 					"SenderName" => $sender_name,
 					"SenderPhoneNumber" => $sender_phone,
-					"SenderStationId" => 1,
+					// "SenderStationId" => 1,
 					"SenderAddress" => $pickup_address,
 					"InputtedSenderAddress" => $pickup_address,
 					"SenderLocality" => $pickup_city,
 					"SenderLocation" => $senderLocation
 				],
 				"ReceiverDetails" => [
-					"ReceiverStationId" => 1,
+					// "ReceiverStationId" => 1,
 					"ReceiverName" => $receiver_name,
 					"ReceiverPhoneNumber" => $receiver_phone,
 					"ReceiverAddress" => $delivery_address,

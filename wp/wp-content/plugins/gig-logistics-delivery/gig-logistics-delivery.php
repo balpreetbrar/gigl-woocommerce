@@ -10,7 +10,7 @@ Description: WooCommerce shipping integration for GIG Logistics.
 Version: 1.0.0
 Requires PHP: 7.2
 Requires at least: 6.0
-Author: Pushtechn "GIGL"
+Author: gigl-wordpress
 Author URI: https://giglogistics.com/
 License: GPLv2 or later
 Text Domain: gig-logistics-delivery

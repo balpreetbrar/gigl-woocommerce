@@ -163,6 +163,48 @@ https://giglogistics.com/privacy-policy/
 API Documentation:
 https://dev-thirdpartynode.theagilitysystems.com/docs/
 
+
+== Additional External Service ==
+
+This plugin also connects to a third-party geocoding API to convert address text into geographic coordinates (latitude and longitude). These coordinates are used to improve shipping rate calculation and shipment scheduling accuracy.
+
+Service Provider:
+LatLng API
+
+Website:
+https://latlng.work/
+
+API Endpoint Used:
+https://api.latlng.work/api
+
+What the service is used for:
+
+The API is used to convert pickup and delivery addresses into geographic coordinates (latitude and longitude) required by the GIG Logistics shipping API.
+
+What data is sent and when:
+
+The plugin sends the following data when geographic coordinates are required:
+
+- Pickup address (street, city, state, postcode, country)
+- Delivery address (street, city, state, postcode, country)
+
+This request is sent only when the plugin needs to retrieve latitude and longitude values for shipping calculations.
+
+Under what conditions data is transmitted:
+
+Data is only transmitted when:
+
+- Shipping rates are calculated at checkout, or
+- Shipment scheduling requires geographic coordinates.
+
+If the shipping method is disabled or shipping rates are not requested, no address data is sent to this service.
+
+Terms of Service:
+https://www.latlng.work/terms
+
+Privacy Policy:
+https://www.latlng.work/privacy
+
 == Frequently Asked Questions ==
 
 = What do I need to use this plugin? =
