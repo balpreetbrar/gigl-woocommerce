@@ -171,9 +171,11 @@ class GIGL_Delivery_Shipping_Method extends WC_Shipping_Method {
 			return;
 		}
 
-		if ( empty( $package['destination']['country'] ) || $package['destination']['country'] !== 'NG' ) {
+		if ( empty( $package['destination']['country'] ) ) {
 			return;
 		}
+
+		$is_international = $package['destination']['country'] !== 'NG';
 
 		if ( empty( $package['destination']['state'] ) || empty( $package['destination']['city'] ) ) {
 			return;
@@ -228,6 +230,11 @@ class GIGL_Delivery_Shipping_Method extends WC_Shipping_Method {
 		}
 
 		if ( empty( $preShipmentItems ) ) {
+			return;
+		}
+
+		if ( $is_international ) {
+			$this->calculate_international_shipping($package, $preShipmentItems);
 			return;
 		}
 
@@ -397,5 +404,104 @@ class GIGL_Delivery_Shipping_Method extends WC_Shipping_Method {
 				'total_service_charge' => $res->data->vat ?? 0,
 			),
 		) );
+	}
+
+	public function calculate_international_shipping( $package, $preShipmentItems ) {
+		try {
+			$api = GIGL_Delivery_Main()->get_api();
+		} catch ( Exception $e ) {
+			return;
+		}
+
+		$country_code = $package['destination']['country'];
+		$countries_res = get_transient( 'giglode_countries_list' );
+
+		if ( empty( $countries_res ) ) {
+			$countries_res = $api->get_countries();
+			if ( ! empty( $countries_res->data ) ) {
+				set_transient( 'giglode_countries_list', $countries_res, DAY_IN_SECONDS );
+			}
+		}
+
+		$destination_country_id = 0;
+		$destination_country_name = '';
+
+		if ( ! empty( $countries_res->data ) ) {
+			foreach ( $countries_res->data as $country ) {
+				if ( (isset($country->TwoLetterCode) && $country->TwoLetterCode === $country_code) || (isset($country->CountryCode) && $country->CountryCode === $country_code) ) {
+					$destination_country_id = $country->CountryId;
+					$destination_country_name = $country->CountryName;
+					break;
+				}
+			}
+		}
+
+		if ( empty( $destination_country_id ) ) {
+			return; // Country not supported by GIGL
+		}
+
+		$declared_value = 0;
+		$intlShipmentItems = array();
+
+		foreach ( $preShipmentItems as $item ) {
+			$declared_value += $item['Value'];
+			$intlShipmentItems[] = array(
+				'InternationalShipmentItemType' => 1, // Default to Normal/Other
+				'Description' => $item['Description'],
+				'Weight' => $item['Weight'],
+				'Quantity' => $item['Quantity'],
+				'Nature' => 1,
+				'Value' => $item['Value']
+			);
+		}
+
+		$params = array(
+			'DestinationCountryId' => $destination_country_id,
+			'ReceiverCity' => $package['destination']['city'],
+			'ReceiverAddress' => $package['destination']['address'],
+			'ReceiverPostalCode' => $package['destination']['postcode'],
+			'ReceiverCountryCode' => $country_code,
+			'ReceiverCountry' => $destination_country_name,
+			'PickupOptions' => 1,
+			'DeclaredValue' => $declared_value,
+			'IsVacuumSeal' => false,
+			'IsPhytosanitaryCertification' => false,
+			'ShipmentItems' => $intlShipmentItems,
+		);
+
+		try {
+			$res = $api->calculate_international_pricing( $params );
+		} catch ( Exception $e ) {
+			return;
+		}
+
+		if ( empty( $res->data->data ) || ! is_array( $res->data->data ) ) {
+			return;
+		}
+
+		foreach ( $res->data->data as $option ) {
+			$label = $this->title;
+			if ( isset( $option->DeliveryType ) ) {
+				$delivery_types = array(
+					0 => 'Standard',
+					1 => 'Express',
+					2 => 'Extra'
+				);
+				$label .= ' (' . ( $delivery_types[$option->DeliveryType] ?? 'International' ) . ')';
+			}
+
+			$this->add_rate( array(
+				'id'    => $this->id . $this->instance_id . '_' . $option->DeliveryType,
+				'label' => $label,
+				'cost'  => wc_format_decimal( $option->GrandTotal ),
+				'meta_data' => array(
+					'is_international' => true,
+					'logistic_company' => $option->LogisticCompany,
+					'delivery_type'    => $option->DeliveryType,
+					'grand_total'      => $option->GrandTotal,
+					'currency'         => $option->Currency,
+				),
+			) );
+		}
 	}
 }

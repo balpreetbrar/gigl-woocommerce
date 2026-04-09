@@ -121,6 +121,36 @@
 
 			return $this->api_request('price/v3', $params, 'POST', $access_token);
 		}
+
+		public function get_countries()
+		{
+			$access_token = $this->login_credentials->data->{'access-token'};
+			if(!$access_token){
+				$this->vendor_login($this->username, $this->password);
+				$access_token = $this->login_credentials->data->{'access-token'};
+			}
+			return $this->api_request('country/get', array(), 'POST', $access_token);
+		}
+
+		public function calculate_international_pricing($params)
+		{
+			$access_token = $this->login_credentials->data->{'access-token'};
+			if(!$access_token){
+				$this->vendor_login($this->username, $this->password);
+				$access_token = $this->login_credentials->data->{'access-token'};
+			}
+			return $this->api_request('intlShipment/price', $params, 'POST', $access_token);
+		}
+
+		public function create_international_shipment($params)
+		{
+			$access_token = $this->login_credentials->data->{'access-token'};
+			if(!$access_token){
+				$this->vendor_login($this->username, $this->password);
+				$access_token = $this->login_credentials->data->{'access-token'};
+			}
+			return $this->api_request('intlShipment/create', $params, 'POST', $access_token);
+		}
 		
 		public function get_lat_lng($address)
 		{		

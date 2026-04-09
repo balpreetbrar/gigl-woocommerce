@@ -227,6 +227,12 @@ class GIGL_Delivery_Main
 
 		if (strpos($shipping_method->get_method_id(), 'gig_logistics_delivery') !== false) {
 
+			$delivery_country_code = $order->get_shipping_country();
+			if ( $delivery_country_code !== 'NG' ) {
+				$this->create_international_order_shipping_task($order_id);
+				return;
+			}
+
 			$receiver_name = $order->get_shipping_first_name() . " " . $order->get_shipping_last_name();
 			$receiver_email = $order->get_billing_email();
 			$receiver_phone = $order->get_billing_phone();
@@ -498,6 +504,119 @@ class GIGL_Delivery_Main
 				);
 				$order->add_order_note($note);
 			}
+		}
+	}
+
+	public function create_international_order_shipping_task($order_id) {
+		$order = wc_get_order($order_id);
+		$api = $this->get_api();
+
+		$country_code = $order->get_shipping_country();
+		$countries_res = get_transient( 'giglode_countries_list' );
+
+		if ( empty( $countries_res ) ) {
+			$countries_res = $api->get_countries();
+			if ( ! empty( $countries_res->data ) ) {
+				set_transient( 'giglode_countries_list', $countries_res, DAY_IN_SECONDS );
+			}
+		}
+
+		$destination_country_id = 0;
+		$destination_country_name = '';
+
+		if ( ! empty( $countries_res->data ) ) {
+			foreach ( $countries_res->data as $country ) {
+				if ( (isset($country->TwoLetterCode) && $country->TwoLetterCode === $country_code) || (isset($country->CountryCode) && $country->CountryCode === $country_code) ) {
+					$destination_country_id = $country->CountryId;
+					$destination_country_name = $country->CountryName;
+					break;
+				}
+			}
+		}
+
+		if ( empty( $destination_country_id ) ) {
+			return;
+		}
+
+		// Get selected delivery type from shipping method meta
+		$methods = $order->get_shipping_methods();
+		$shipping_method = !empty($methods) ? array_shift($methods) : null;
+		$delivery_type = 0; // Default Standard
+		$logistic_company = 0;
+
+		if ( $shipping_method ) {
+			$full_id = $shipping_method->get_id(); // e.g. gig_logistics_delivery:1_0
+			
+			if ( preg_match('/_(\d+)$/', $full_id, $matches) ) {
+				$delivery_type = intval($matches[1]);
+			}
+		}
+
+		$preShipmentItems = array();
+		$declared_value = 0;
+		foreach ($order->get_items() as $item) {
+			$wc_product = $item->get_product();
+			$quantity = $item->get_quantity();
+			$weight = $wc_product ? $wc_product->get_weight() : 1;
+			$total_weight = floatval($weight) * intval($quantity);
+			
+			$preShipmentItems[] = array(
+				"InternationalShipmentItemType" => 1,
+				"Description" => $item->get_name(),
+				"Weight" => $total_weight ?: 1,
+				"Quantity" => $quantity,
+				"Nature" => 1,
+				"IsVolumetric" => true,
+				"Length" => 10,
+				"Width" => 10,
+				"Height" => 10,
+				"PackagingType" => 1,
+				"Value" => $item->get_total()
+			);
+			$declared_value += $item->get_total();
+		}
+
+		$params = array(
+			"Shipments" => array(
+				array(
+					"Receiver" => array(
+						"ReceiverName" => $order->get_shipping_first_name() . " " . $order->get_shipping_last_name(),
+						"ReceiverState" => $order->get_shipping_state(),
+						"ReceiverPhoneNumber" => $order->get_billing_phone(),
+						"ReceiverEmail" => $order->get_billing_email(),
+						"ReceiverCity" => $order->get_shipping_city(),
+						"ReceiverAddress" => $order->get_shipping_address_1(),
+						"ReceiverPostalCode" => $order->get_shipping_postcode(),
+						"ReceiverCountryCode" => $country_code,
+						"ReceiverCountry" => $destination_country_name,
+						"ReceiverStateOrProvinceCode" => $order->get_shipping_state()
+					),
+					"ShipmentItems" => $preShipmentItems,
+					"ShipmentDetails" => array(
+						"ManufacturerCountry" => "NIGERIA",
+						"DestinationCountryId" => $destination_country_id,
+						"PickupOptions" => 1,
+						"DeclaredValue" => $declared_value,
+						"DeliveryType" => $delivery_type,
+						"IsVacuumSeal" => false,
+						"IsPhytosanitaryCertification" => false,
+						"LogisticsCompany" => $logistic_company,
+						"FedexPackagingType" => 1
+					)
+				)
+			)
+		);
+
+		$response = $api->create_international_shipment($params);
+		
+		if ( isset($response->data->Waybill) || (isset($response->data) && is_array($response->data) && isset($response->data[0]->Waybill)) ) {
+			$waybill = isset($response->data->Waybill) ? $response->data->Waybill : $response->data[0]->Waybill;
+			
+			update_post_meta($order_id, 'gig_logistics_delivery_waybill', $waybill);
+			$order->add_order_note(sprintf(__('International Shipment scheduled via Gigl delivery (Waybill: %s)', 'gig-logistics-delivery'), $waybill));
+		} else {
+			$message = isset($response->message) ? $response->message : 'Unknown error';
+			$order->add_order_note(sprintf(__('Failed to create international GIGL shipment: %s', 'gig-logistics-delivery'), $message));
 		}
 	}
 
