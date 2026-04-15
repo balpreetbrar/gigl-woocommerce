@@ -622,31 +622,22 @@ class GIGL_Delivery_Main
 
 		$response = $api->create_international_shipment($params);
 
-		error_log( '[GIGL INTL] create_international_shipment response: ' . print_r( $response, true ) );
-
-		// Extract waybill from multiple possible response structures
+		// Extract waybill — GIGL wraps the result as: response->data->data[0]->Waybill
 		$waybill = null;
-		if ( isset( $response->data->Waybill ) ) {
+		if ( isset( $response->data->data[0]->Waybill ) ) {
+			$waybill = $response->data->data[0]->Waybill;
+		} elseif ( isset( $response->data->Waybill ) ) {
 			$waybill = $response->data->Waybill;
 		} elseif ( isset( $response->data ) && is_array( $response->data ) && isset( $response->data[0]->Waybill ) ) {
 			$waybill = $response->data[0]->Waybill;
-		} elseif ( isset( $response->data ) && is_object( $response->data ) ) {
-			// Walk all properties to find anything with 'waybill' in the key
-			foreach ( (array) $response->data as $key => $value ) {
-				if ( stripos( $key, 'waybill' ) !== false && ! empty( $value ) ) {
-					$waybill = $value;
-					break;
-				}
-			}
 		}
 
 		if ( ! empty( $waybill ) ) {
 			update_post_meta($order_id, 'gig_logistics_delivery_waybill', $waybill);
 			$order->add_order_note(sprintf(__('International Shipment scheduled via Gigl delivery (Waybill: %s)', 'gig-logistics-delivery'), $waybill));
 		} else {
-			// Log the full response so we can trace the actual waybill key
 			$message = isset($response->message) ? $response->message : 'Unknown error';
-			$order->add_order_note(sprintf(__('GIGL international shipment response: %s — check debug.log for full response', 'gig-logistics-delivery'), $message));
+			$order->add_order_note(sprintf(__('Failed to create international GIGL shipment: %s', 'gig-logistics-delivery'), $message));
 		}
 	}
 
