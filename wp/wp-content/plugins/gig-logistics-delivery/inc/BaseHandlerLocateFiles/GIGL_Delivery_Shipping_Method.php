@@ -192,7 +192,7 @@ class GIGL_Delivery_Shipping_Method extends WC_Shipping_Method {
 		}
 
 		$delivery_country_code = $package['destination']['country'];
-		print_r($package);
+		// print_r($package);
 		$delivery_state_code   = $package['destination']['state'];
 		$delivery_city         = $package['destination']['city'];
 		$delivery_postcode     = isset( $package['destination']['postcode'] ) ? $package['destination']['postcode'] : '';
