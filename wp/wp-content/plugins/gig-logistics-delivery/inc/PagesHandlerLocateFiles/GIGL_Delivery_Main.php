@@ -538,17 +538,29 @@ class GIGL_Delivery_Main
 			return;
 		}
 
-		// Get selected delivery type from shipping method meta
+		// Get selected delivery type and logistic company from shipping method meta
 		$methods = $order->get_shipping_methods();
 		$shipping_method = !empty($methods) ? array_shift($methods) : null;
 		$delivery_type = 0; // Default Standard
 		$logistic_company = 0;
 
 		if ( $shipping_method ) {
-			$full_id = $shipping_method->get_id(); // e.g. gig_logistics_delivery:1_0
-			
-			if ( preg_match('/_(\d+)$/', $full_id, $matches) ) {
-				$delivery_type = intval($matches[1]);
+			// Prefer meta_data values saved during add_rate() — more reliable than parsing the rate ID
+			$delivery_type_meta    = $shipping_method->get_meta('delivery_type');
+			$logistic_company_meta = $shipping_method->get_meta('logistic_company');
+
+			if ( $delivery_type_meta !== '' && $delivery_type_meta !== null ) {
+				$delivery_type = intval($delivery_type_meta);
+			} else {
+				// Fallback: extract from rate ID suffix e.g. gig_logistics_delivery:1_0
+				$full_id = $shipping_method->get_id();
+				if ( preg_match('/_(\d+)$/', $full_id, $matches) ) {
+					$delivery_type = intval($matches[1]);
+				}
+			}
+
+			if ( $logistic_company_meta !== '' && $logistic_company_meta !== null ) {
+				$logistic_company = intval($logistic_company_meta);
 			}
 		}
 
@@ -583,6 +595,7 @@ class GIGL_Delivery_Main
 						"ReceiverName" => $order->get_shipping_first_name() . " " . $order->get_shipping_last_name(),
 						"ReceiverState" => $order->get_shipping_state(),
 						"ReceiverPhoneNumber" => $order->get_billing_phone(),
+						"ReceiverAltPhoneNumber" => $order->get_billing_phone(),
 						"ReceiverEmail" => $order->get_billing_email(),
 						"ReceiverCity" => $order->get_shipping_city(),
 						"ReceiverAddress" => $order->get_shipping_address_1(),
@@ -608,15 +621,32 @@ class GIGL_Delivery_Main
 		);
 
 		$response = $api->create_international_shipment($params);
-		
-		if ( isset($response->data->Waybill) || (isset($response->data) && is_array($response->data) && isset($response->data[0]->Waybill)) ) {
-			$waybill = isset($response->data->Waybill) ? $response->data->Waybill : $response->data[0]->Waybill;
-			
+
+		error_log( '[GIGL INTL] create_international_shipment response: ' . print_r( $response, true ) );
+
+		// Extract waybill from multiple possible response structures
+		$waybill = null;
+		if ( isset( $response->data->Waybill ) ) {
+			$waybill = $response->data->Waybill;
+		} elseif ( isset( $response->data ) && is_array( $response->data ) && isset( $response->data[0]->Waybill ) ) {
+			$waybill = $response->data[0]->Waybill;
+		} elseif ( isset( $response->data ) && is_object( $response->data ) ) {
+			// Walk all properties to find anything with 'waybill' in the key
+			foreach ( (array) $response->data as $key => $value ) {
+				if ( stripos( $key, 'waybill' ) !== false && ! empty( $value ) ) {
+					$waybill = $value;
+					break;
+				}
+			}
+		}
+
+		if ( ! empty( $waybill ) ) {
 			update_post_meta($order_id, 'gig_logistics_delivery_waybill', $waybill);
 			$order->add_order_note(sprintf(__('International Shipment scheduled via Gigl delivery (Waybill: %s)', 'gig-logistics-delivery'), $waybill));
 		} else {
+			// Log the full response so we can trace the actual waybill key
 			$message = isset($response->message) ? $response->message : 'Unknown error';
-			$order->add_order_note(sprintf(__('Failed to create international GIGL shipment: %s', 'gig-logistics-delivery'), $message));
+			$order->add_order_note(sprintf(__('GIGL international shipment response: %s — check debug.log for full response', 'gig-logistics-delivery'), $message));
 		}
 	}
 

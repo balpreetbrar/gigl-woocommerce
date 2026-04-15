@@ -481,26 +481,44 @@ class GIGL_Delivery_Shipping_Method extends WC_Shipping_Method {
 		}
 
 		foreach ( $res->data as $option ) {
-			$label = $this->title;
-			if ( isset( $option->DeliveryType ) ) {
-				$delivery_types = array(
-					0 => 'Standard',
-					1 => 'Express',
-					2 => 'Extra'
-				);
-				$label .= ' (' . ( $delivery_types[$option->DeliveryType] ?? 'International' ) . ')';
+			$logistic_company_id = $option->LogisticCompany ?? 0;
+
+			$carrier_names = array(
+				0 => 'GIG',
+				1 => 'UPS',
+				2 => 'DHL',
+				3 => 'FEDEX',
+			);
+			$carrier_name = $carrier_names[ $logistic_company_id ] ?? 'International';
+
+			$delivery_type_names = array(
+				0 => 'Standard',
+				1 => 'Express',
+				2 => 'Extra',
+			);
+			$delivery_type_name = isset( $option->DeliveryType )
+				? ( $delivery_type_names[ $option->DeliveryType ] ?? 'Standard' )
+				: 'Standard';
+
+			$label = $this->title . ' - ' . $carrier_name . ' (' . $delivery_type_name . ')';
+
+			$grand_total = $option->GrandTotal ?? ( $option->Price ?? null );
+
+			if ( empty( $grand_total ) ) {
+				continue; // skip options with no price
 			}
 
+			// Include logistic_company in ID to prevent collision between carriers with same DeliveryType
 			$this->add_rate( array(
-				'id'    => $this->id . $this->instance_id . '_' . $option->DeliveryType,
+				'id'    => $this->id . $this->instance_id . '_' . $logistic_company_id . '_' . ( $option->DeliveryType ?? 0 ),
 				'label' => $label,
-				'cost'  => wc_format_decimal( $option->GrandTotal ),
+				'cost'  => wc_format_decimal( $grand_total ),
 				'meta_data' => array(
-					'is_international' => true,
-					'logistic_company' => $option->LogisticCompany,
-					'delivery_type'    => $option->DeliveryType,
-					'grand_total'      => $option->GrandTotal,
-					'currency'         => $option->Currency,
+					'is_international'  => true,
+					'logistic_company'  => $logistic_company_id,
+					'delivery_type'     => $option->DeliveryType ?? 0,
+					'grand_total'       => $grand_total,
+					'currency'          => $option->Currency ?? '',
 				),
 			) );
 		}
