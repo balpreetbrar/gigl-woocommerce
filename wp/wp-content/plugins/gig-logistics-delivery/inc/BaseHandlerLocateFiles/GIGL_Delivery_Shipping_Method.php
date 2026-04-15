@@ -414,6 +414,7 @@ class GIGL_Delivery_Shipping_Method extends WC_Shipping_Method {
 		}
 
 		$country_code = $package['destination']['country'];
+
 		$countries_res = get_transient( 'giglode_countries_list' );
 
 		if ( empty( $countries_res ) ) {
@@ -475,11 +476,11 @@ class GIGL_Delivery_Shipping_Method extends WC_Shipping_Method {
 			return;
 		}
 
-		if ( empty( $res->data->data ) || ! is_array( $res->data->data ) ) {
+		if ( empty( $res->data ) || ! is_array( $res->data ) ) {
 			return;
 		}
 
-		foreach ( $res->data->data as $option ) {
+		foreach ( $res->data as $option ) {
 			$label = $this->title;
 			if ( isset( $option->DeliveryType ) ) {
 				$delivery_types = array(
